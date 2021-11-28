@@ -1,0 +1,45 @@
+{
+  "name": "propiedadintelectualnuevo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blubearec/propiedadintelectual.git"
+  },
+  "keywords": [
+    "propiedad",
+    "intelectual"
+  ],
+  "author": "devscrbusiness",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blubearec/propiedadintelectual/issues"
+  },
+  "homepage": "https://github.com/blubearec/propiedadintelectual#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "@admin-bro/express": "^3.1.0",
+    "@admin-bro/mongoose": "^1.1.0",
+    "@admin-bro/upload": "^1.3.1",
+    "admin-bro": "^4.0.1",
+    "admin-bro-expressjs": "^2.1.1",
+    "argon2": "^0.28.3",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "colors": "^1.4.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.17.2",
+    "mongoose": "^6.0.13",
+    "rimraf": "^3.0.2",
+    "tslib": "^2.3.1"
+  }
+}

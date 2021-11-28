@@ -1,0 +1,37 @@
+// {
+// resource: ClaseInternacional,
+
+// options: { 
+//     navigation: BasicosNav,
+//     actions: {
+//     edit: { isAccessible: onlyAdmin },
+//     delete: { isAccessible: onlyAdmin },
+//     new: { isAccessible: onlyAdmin },
+//     }
+// }
+// },
+
+
+const { ClaseInternacional } = require('./claseInternacional.entity');
+const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
+
+const BasicosNav = {
+    name: 'Básicos',
+    icon: 'Report',
+  };
+
+const options = {
+
+  navigation: BasicosNav, 
+  actions: {
+      edit: { isAccessible: onlyAdmin },
+      delete: { isAccessible: onlyAdmin },
+      new: { isAccessible: onlyAdmin },
+  },
+
+};
+
+module.exports = {
+    options,
+    resource: ClaseInternacional,
+  }
