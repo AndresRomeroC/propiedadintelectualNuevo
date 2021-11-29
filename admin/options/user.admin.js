@@ -43,9 +43,10 @@
 const AdminBro = require('admin-bro');
 const { beforeHookPassword, afterHookPassword } = require('../../hooks/user.hooks');
 const { beforeHookUpload, afterHookUpload } = require('../../hooks/user.hooks');
+const bcrypt           = require('bcrypt');
 
 const  User  = require('../../models/User/user.entity');
-//const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
+const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
 const UsuariosNav = {
     name: 'Usuarios',
@@ -60,13 +61,13 @@ const optionUser = {
         password: {
           type: 'password',
         },
-        avatar: {
-          components: {
-            edit: AdminBro.bundle('../../components/User/Avatar.edit.jsx'),
-            //list: AdminBro.bundle('../../components/User/Avatar.list.jsx'),
-           // show: AdminBro.bundle('../../components/User/Avatar.list.jsx'),
-          },
-        },
+         avatar: {
+           components: {
+             edit: AdminBro.bundle('../../components/User/Avatar.edit.jsx'),
+             //list: AdminBro.bundle('../../components/User/Avatar.list.jsx'),
+            // show: AdminBro.bundle('../../components/User/Avatar.list.jsx'),
+           },
+         },
         password: {
             type: 'string',
             isVisible: {
@@ -108,23 +109,23 @@ const optionUser = {
     //   },
 
       /////////////////////////
-    // actions: {
-    //     edit: { isAccessible: onlyAdmin },
-    //     delete: { isAccessible: onlyAdmin },
-    //     new: {
-    //     isAccessible: onlyAdmin,
-    //     before: async (request) => {
-    //         if(request.payload.password) {
-    //         request.payload = {
-    //             ...request.payload,
-    //             encryptedPassword: await bcrypt.hash(request.payload.password, 10),
-    //             password: undefined,
-    //         }
-    //         }
-    //         return request
-    //     },
-    //     }
-    // }
+    actions: {
+        edit: { isAccessible: onlyAdmin },
+        delete: { isAccessible: onlyAdmin },
+        new: {
+        isAccessible: onlyAdmin,
+        before: async (request) => {
+            if(request.payload.password) {
+            request.payload = {
+                ...request.payload,
+                encryptedPassword: await bcrypt.hash(request.payload.password, 10),
+                password: undefined,
+            }
+            }
+            return request
+        },
+        }
+    },
     listProperties: ['Name','Email','Role'],
     
 };

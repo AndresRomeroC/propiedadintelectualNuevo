@@ -32,7 +32,8 @@ const buildAdminRouter = (admin) => {
                 // if (user && (await argon2.verify(user.encryptedPassword, password))) {
                 //     return user.toJSON();
                 // }
-                return true;
+                // true si la clave y contraseña es correcta, false si existe error
+                return false;
       },
     },
     null,

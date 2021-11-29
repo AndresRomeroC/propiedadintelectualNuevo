@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 //const User      = require('./models/User/user.entity');
 const UserA      = require('./user.admin');
 const Marca     = require('../../models/Marca/marca.admin');
+//const MisMarcas     = require('../../models/MisMarcas/mismarcas.admin');
 const Gaceta    = require('../../models/Gaceta/gaceta.admin');
 const Country   = require('../../models/Country/country.admin');
 const Customer  = require('../../models/Customer/customer.admin');
@@ -44,6 +45,7 @@ const AdminBroOptions = {
     Country,
     NizaClass,
     UserA,
+    //MisMarcas
   //  {
   //    resource: User,
   //    options: {

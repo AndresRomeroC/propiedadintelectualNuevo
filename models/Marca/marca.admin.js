@@ -25,7 +25,10 @@ const PropiedadIntelectualNav = {
 
 const options = {
 
-  navigation: PropiedadIntelectualNav,  
+  navigation: PropiedadIntelectualNav,
+  // properties: {
+  //   tipoEstados: { isVisible: { list: true, show: false, edit: true, filter: true } },
+  // }, 
   actions: {
       edit: { isAccessible: onlyAdmin },
       delete: { isAccessible: onlyAdmin },

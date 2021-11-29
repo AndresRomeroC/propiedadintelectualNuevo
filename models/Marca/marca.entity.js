@@ -114,7 +114,9 @@ const MarcaSchema = new mongoose.Schema({
       type: mongoose.SchemaTypes.ObjectId,      
       ref: 'Gaceta',
     },
-    
+    // content: {
+    //   type: String,
+    // }, 
     // otherField: {
     //   type: [OtherSchema],
     // },

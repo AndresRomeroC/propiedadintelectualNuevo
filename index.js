@@ -21,6 +21,7 @@ connection.on("error", console.error.bind(console, "connection error: "));
 const adminBro = new AdminBro(options);
 const router = buildAdminRouter(adminBro);
 
+
 app.get('/hola-mundo', function (req, res) {
   res.send('Hello World en su respectiva ruta en app.js')
   });
