@@ -41,8 +41,8 @@
 // },
 
 const AdminBro = require('admin-bro');
-const { beforeHookPassword, afterHookPassword } = require('../../hooks/user.hooks');
-const { beforeHookUpload, afterHookUpload } = require('../../hooks/user.hooks');
+const { beforeHookPassword, afterHookPassword } = require('../../hooks/user.hooks_old');
+const { beforeHookUpload, afterHookUpload } = require('../../hooks/user.hooks_old');
 const bcrypt           = require('bcrypt');
 
 const  User  = require('../../models/User/user.entity');

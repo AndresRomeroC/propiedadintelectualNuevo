@@ -21,12 +21,13 @@ const buildAdminRouter = (admin) => {
             cookieName: 'admin-bro',
             cookiePassword: 'superlongandcomplicatedname',
             authenticate: async (Email, password) => {
-                const user = await User.findOne({ Email });
+                const user = await User.findOne({ Email }); 
                 
                 if (user) {
                     const matched = await bcrypt.compare(password, user.encryptedPassword)
                     if (matched) {
-                    return user.toJSON()
+                      console.log(matched);
+                    return user//.toJSON()
                     }
                 }
                 // if (user && (await argon2.verify(user.encryptedPassword, password))) {
@@ -39,7 +40,7 @@ const buildAdminRouter = (admin) => {
     null,
     {
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: true,      
     }
   );
 

@@ -12,7 +12,7 @@ const buildAdminRouter = require('./admin/routes/admin.routes');
 //Setings
 app.use(express.static(path.join(__dirname,'src/public')));
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 
 // Database
 connection.once('open', ()=>console.log('Database connected Successfully'));
@@ -22,13 +22,14 @@ const adminBro = new AdminBro(options);
 const router = buildAdminRouter(adminBro);
 
 
-app.get('/hola-mundo', function (req, res) {
-  res.send('Hello World en su respectiva ruta en app.js')
-  });
+// app.get('/hola-mundo', function (req, res) {
+//   res.send('Hello World en su respectiva ruta en app.js')
+//   });
 
-app.use(bodyParser.json());
-//app.use(adminBro.options.rootPath, router);
-app.use('/admin', router);
+//app.use(bodyParser.json());
+app.use(adminBro.options.rootPath, router);
+//app.use('/admin', router);
 app.use('/uploads', express.static('uploads'));
+
 
 app.listen(port, ()=>console.log(`Listening at Port ${port}`));

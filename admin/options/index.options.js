@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 
 //Models
-//const User      = require('./models/User/user.entity');
+//const UserM      = require('../../models/User/user.entity');
 const UserA      = require('./user.admin');
 const Marca     = require('../../models/Marca/marca.admin');
 //const MisMarcas     = require('../../models/MisMarcas/mismarcas.admin');
@@ -30,13 +30,21 @@ const ClaseInternacional     = require('../../models/ClaseInternacional/claseInt
 //   icon: 'Report',
 // }
 
+//const { authenticationClosure } = require('./auth')
+
+// const authenticate = authenticationClosure({
+//   UserM
+// })
 
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
-AdminBro.registerAdapter(mongooseAdminBro);
+//AdminBro.registerAdapter(mongooseAdminBro);
+
+
 const AdminBroOptions = {
-  databases: [mongoose],
-  rootPath: '/admin',
+  //{ currentAdmin },
+  //databases: [mongoose],
+  //rootPath: '/admin',
   resources: [
     Marca,
     Gaceta,
@@ -45,7 +53,7 @@ const AdminBroOptions = {
     Country,
     NizaClass,
     UserA,
-    //MisMarcas
+  //  MisMarcas
   //  {
   //    resource: User,
   //    options: {
