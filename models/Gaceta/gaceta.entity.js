@@ -3,7 +3,9 @@ const mongoose = require('mongoose')
 const GacetaSchema = new mongoose.Schema({
     NumberId: {
       type: Number,
-      required: true
+      required: true,
+      index: true,
+    unique: true 
     },
     Year: {
       type: String,

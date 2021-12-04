@@ -58,7 +58,7 @@ const MarcaSchema = new mongoose.Schema({
       type: Date, default: Date.now()
     }, 
     numeroSolicitud: {
-      type: Number,
+      type: String,
     },
     fechaTitulo: {
       type: Date, default: Date.now()

@@ -22,7 +22,7 @@
 const { Gaceta } = require('./gaceta.entity');
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
-const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload} = require('../../hooks/gaceta.hooks');
+const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload} = require('../../hooks/gaceta.hooks');
 
 
 
@@ -48,6 +48,7 @@ const options = {
         list: true, edit: false, filter: true, show: true,
       },
     },
+    
     profileExcelLocation: {
       components: {
         //edit: AdminBro.bundle('../../components/User/holaMundo.jsx'),
@@ -56,6 +57,10 @@ const options = {
         show: AdminBro.bundle('../../components/Gaceta/Avatar.list.jsx'),
       },
     },
+  },
+  sort: {
+    sortBy : 'NumberId',
+    direction: 'desc',
   },
   actions: {
       edit: { 
@@ -73,7 +78,19 @@ const options = {
         },
       },
       delete: { isAccessible: onlyAdmin },
-      new: { isAccessible: onlyAdmin },
+      new: { 
+        isAccessible: onlyAdmin ,
+        before: async (request, context) => {
+          const modifiedRequest = await beforeHookPassword(request, context);
+  
+          return beforeHookUpload(request, context, modifiedRequest);
+        },
+        after: async (response, request, context) => {
+        const modifiedResponse = await afterHookPassword(response, context);
+
+        return afterNewHookUpload(response, context, modifiedResponse);
+        },
+       },
   },
   listProperties: ['NumberId', 'Year', 'Month',
   'Quincena','UploadDate','PublicationDate'],

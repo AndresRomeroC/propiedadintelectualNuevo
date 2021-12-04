@@ -27,7 +27,8 @@ const buildAdminRouter = (admin) => {
                     const matched = await bcrypt.compare(password, user.encryptedPassword)
                     if (matched) {
                       console.log(matched);
-                    return user//.toJSON()
+                      //return true
+                      return user//.toJSON()
                     }
                 }
                 // if (user && (await argon2.verify(user.encryptedPassword, password))) {
