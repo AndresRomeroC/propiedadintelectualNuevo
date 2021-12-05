@@ -4,9 +4,12 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 const XLSX  = require('xlsx');
 
-const  { MarcaSchema, Marca }         = require('../models/Marca/marca.entity');
+const AdminBro = require('admin-bro');
 
-const  { GacetaSchema, Gaceta }      = require('../models/Gaceta/gaceta.entity');
+const  { MarcaSchema, Marca }                                = require('../models/Marca/marca.entity');
+const  { GacetaSchema, Gaceta }                              = require('../models/Gaceta/gaceta.entity');
+const  { ClaseInternacionalSchema, ClaseInternacional }      = require('../models/ClaseInternacional/claseInternacional.entity');
+const { ObjectId } = require('mongoose/lib/schema/index');
 
 
 
@@ -28,13 +31,17 @@ const afterHookUpload = async (response, context) => {
   
   const { record, profileExcelLocation } = context;
 
-  //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
-  //console.log(record);
-  //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FIN record ===== > ");
-  //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
 
   if (profileExcelLocation) {
     
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
+    console.log(record);
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FIN record ===== > ");
+    console.log(profileExcelLocation);
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
+
+
     //await rimraf.sync(record.params.avatar.substring(0));
 
     const filePath = path.join('uploads', record.id().toString(), profileExcelLocation.name);
@@ -89,7 +96,10 @@ const afterHookUpload = async (response, context) => {
     if( existeGaceta == null ){
       //ARC :Obtener la ruta :
       //D:\adminbro\propiedadintelectualNuevo
-      const pathExcel = `D:\\adminbro\\propiedadintelectualNuevo\\${filePath}`;
+      //const pathExcel = `D:\\adminbro\\propiedadintelectualNuevo\\${filePath}`;
+      
+      const pathExcel = profileExcelLocation.path ;
+      
       const workbook = XLSX.readFile(pathExcel);
       var nombreHoja = workbook.SheetNames;
       let datos = XLSX.utils.sheet_to_json(workbook.Sheets[nombreHoja[0]]);
@@ -220,30 +230,58 @@ const afterNewHookUpload = async (response, context) => {
   
 
   //
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO response ===== > ");
-    console.log(response);
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FINresponse ===== > ");
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX");
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO response ===== > ");
+    // console.log(response);
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FINresponse ===== > ");
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX");
   
   
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO context ===== > ");
-    console.log(context);
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FIN context ===== > ");
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX");
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO context ===== > ");
+    // console.log(context);
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FIN context ===== > ");
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX");
    
     
+
     const { record, profileExcelLocation } = context;
   
-    //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
-    //console.log(record);
-    //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FIN record ===== > ");
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
+    record.params.profileExcelLocation = context.profileExcelLocation.path;
+    console.log(record);
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx fin record ===== > ");
+
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
+    // console.log(record);
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FIN record ===== > ");
+    // console.log(profileExcelLocation);
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
     //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX");
   
     if (profileExcelLocation) {
       
       //await rimraf.sync(record.params.avatar.substring(0));
-  
-      const filePath = path.join('uploads', record.id().toString(), profileExcelLocation.name);
+
+      //record.params.profileExcelLocation = profileExcelLocation.name;
+
+      // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX profileExcelLocation.name");
+
+      // console.log(profileExcelLocation.name);
+
+      // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX record.params");
+
+      // console.log(record.params);
+
+      
+
+      // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX");
+      // const existeGaceta=  await Gaceta.findOne({ NumberId: record.params.NumberId }).exec();
+      // console.log(existeGaceta);
+      // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
+
+    //const filePath = path.join('uploads', record.id().toString(), profileExcelLocation.name);
+    const filePath = path.join('uploads', record.params.NumberId.toString(), profileExcelLocation.name);
+    
       console.log(filePath);
   
       //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx console.log(record.id().toString()); ===== > ");
@@ -274,11 +312,29 @@ const afterNewHookUpload = async (response, context) => {
         if (err) throw err;
       });
   
-      //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx rename 2 : filePath");
+      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx rename 2 : filePath");
+      console.log(filePath);
       
   
-      await record.update({ profileExcelLocation: `/${filePath}` });
+      //await record.update({ profileExcelLocation: `/${filePath}` });
   
+      //record.params.profileExcelLocation = `/${filePath}` ;
+
+     // record.profileExcelLocation = `/${filePath}` ;
+
+      // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx record 2 : record");
+      // console.log(record);
+
+
+
+      // const gacetaNueva = Gaceta.insertMany(record.params).then(function(){
+      //   console.log("Data inserted Gaceta")  // Success
+      // }).catch(function(error){
+      //     console.log(error)      // Failure
+      // });
+
+      // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx gaceta");
+      // console.log(gacetaNueva);
   
   
       await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
@@ -290,12 +346,15 @@ const afterNewHookUpload = async (response, context) => {
   
       // 1.- Validar existencia de Gaceta
      // const existeGaceta=  await Gaceta.findOne({ NumberId: record.params.NumberId }).exec();
-      console.log(record);
+     
   
      // if( existeGaceta == null ){
         //ARC :Obtener la ruta :
         //D:\adminbro\propiedadintelectualNuevo
-        const pathExcel = `D:\\adminbro\\propiedadintelectualNuevo\\${filePath}`;
+        //const pathExcel = `D:\\adminbro\\propiedadintelectualNuevo\\${filePath}`;
+      
+      const pathExcel = profileExcelLocation.path ;
+      
         const workbook = XLSX.readFile(pathExcel);
         var nombreHoja = workbook.SheetNames;
         let datos = XLSX.utils.sheet_to_json(workbook.Sheets[nombreHoja[0]]);
@@ -325,7 +384,60 @@ const afterNewHookUpload = async (response, context) => {
           //let existeMarca =   Marca.where(query);
   
   
-          console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i}`);
+          //console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i}`);
+
+          //console.log(dato);
+
+          if(dato.claseInternacional){
+
+            // function findOneC(query) {
+            //   return new Promise((resv, rej) => {
+            //     ClaseInternacional.findOne(query, (err, res) => {
+            //     if(err) {
+            //       console.log("problemas al buscar la clase internacional");
+
+            //     }
+            //     console.log('no hay clase internacional'); 
+            //     })
+            //   })
+            // }  
+
+            //   const existeClaseInternacional=  findOneC({ ClassInt: datos.claseInternacional } );
+                                         
+            // const existeClaseInternacional =  ClaseInternacional.findOne({ ClassInt: dato.claseInternacional })
+            //   .then((result) => {
+            //     return result
+            //   })
+            //   .catch(err => {
+            //     console.log("Errores al consultar Clase internacional");
+            //   })
+            //const existeClaseInternacional =  ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
+            
+            
+            //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  dato.claseInternacionalId");
+            //console.log(dato.claseInternacional);
+            //const existeClaseInternacional =  await ClaseInternacional.findOne({ ClassInt: typeof parseInt(dato.claseInternacional) }).exec()
+            const existeClaseInternacional = await ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
+
+            // existeClaseInternacional.then(function(result){
+            //   console.log(result)
+            //   })
+              
+              //const existeClaseInternacional= await  ClaseInternacional.where({ ClassInt: datos.claseInternacionalId });
+
+
+              //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  existeClaseInternacional");
+              //console.log(existeClaseInternacional);
+              
+              
+             // console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i} : existeClaseInternacional.ClassInt`);
+              
+              if(existeClaseInternacional){
+                //console.log(existeClaseInternacional._id);
+                dato.claseInternacionalId = existeClaseInternacional._id;
+              }
+           }
+
           //console.log(existeMarca);
   
           //  if( existeMarca == null ){
@@ -342,13 +454,41 @@ const afterNewHookUpload = async (response, context) => {
               Marca.findOneAndUpdate(query, {$set:{tipoEstados:"Caducidad del trámite de renovación"}}, {new: true}, (err, result) => {
                 if (err) {
                     console.log("Something wrong when updating data!");
+                    Gaceta.deleteOne({
+                      _id: record.id()
+                     })
+                      .then(() => {
+                        console.log('Gaceta Deleted!'); 
+                      })
+                      .catch(err => {
+                        console.log("problemas al borrar la gaceta nueva");
+                      })
                 }
                 
                 if( result == null ){
+
+                  //console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i} : record info`);
+                  //console.log(record);
+
+                  if(record.id()) 
+                  dato.gacetaId = record.id().toString();
+
                   Marca.insertMany(dato).then(function(){
                     console.log("Data inserted")  // Success
                   }).catch(function(error){
                       console.log(error)      // Failure
+                      //Gaceta.deleteOne({ NumberId: record.params.NumberId }).exec();
+
+                      Gaceta.deleteOne({
+                        _id: record.id()
+                       })
+                        .then(() => {
+                          console.log('Gaceta Deleted!'); 
+                        })
+                        .catch(err => {
+                          console.log("problemas al borrar la gaceta nueva");
+                        })
+
                   });
                 }
                     console.log(result);
@@ -422,12 +562,99 @@ const afterNewHookUpload = async (response, context) => {
     return response;
   };
 
-const beforeHookUpload = async (request, context) => {
+
+///////////////////////////////////////////////////////////////////////////////////////////////.
+/////////////////////////////////////////////////        1   
+///////////////////////////////////////////////////////////////////////////////////////////////
+const beforeHookPassword = async (request, context) => {
+  if (request.method == 'post') {
+    const { NumberId, password, ...otherParams } = request.payload;
+
+    // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookPassword : request 1");
+    // console.log(NumberId);
+    // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX FIN beforeHookPassword : request 1");
+
+    const existeGaceta=  await Gaceta.findOne({ NumberId: NumberId }).exec();
+    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookPassword : existeGaceta 1");
+    
+    
+    //  if (existeGaceta) {
+    //    throw new ValidationError({
+    //      name: {
+    //        message: 'Gaceta ya existe 1',
+    //      },
+    //    }, {
+    //      message: 'Gaceta ya existe 2',
+    //    })
+    //  }
+   if (password) {
+      const hashPassword = await argon2.hash(password);
+      return {
+        ...request,
+        payload: {
+          ...otherParams,
+          encryptedPassword: hashPassword,
+          existeGaceta
+        },
+      };
+    }
+
+    return {
+      ...request,
+      payload: {
+        ...otherParams,
+        existeGaceta
+      },
+    };
+  }
+};
+  
+
+///////////////////////////////////////////////////////////////////////////////////////////////.
+/////////////////////////////////////////////////        2   
+///////////////////////////////////////////////////////////////////////////////////////////////
+const beforeHookUpload = async (request, context, modifiedRequest) => {
   if (request.method === 'post') {
-    const { profileExcelLocation, ...otherParams } = request.payload;
+    const { existeGaceta, profileExcelLocation, ...otherParams } = request.payload;
 
-    context.profileExcelLocation = profileExcelLocation;
+    //  console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookUpload : modifiedRequest");
+    //  console.log(modifiedRequest);
+    //  console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX FIN beforeHookUpload : modifiedRequest");
 
+
+      // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookUpload : request");
+      // console.log(request);
+      // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX FIN beforeHookUpload : request");
+
+      // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookUpload : context");
+      // console.log(context);
+      // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX FIN beforeHookUpload : context");
+
+
+    //   console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX context.profileExcelLocation = profileExcelLocation init");
+       context.profileExcelLocation = profileExcelLocation;
+
+
+    //   console.log(profileExcelLocation);
+
+    // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX context.profileExcelLocation = profileExcelLocation fin");
+
+
+    //context.existeGaceta = existeGaceta;
+    // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookUpload : existeGaceta 1");
+    // console.log(existeGaceta);
+    // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookUpload : existeGaceta 1");
+
+    // 1.- Validar existencia de Gaceta
+    //const existeGaceta2=  await Gaceta.findOne({ NumberId: record.params.NumberId }).exec();
+    //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookUpload : existeGaceta 2");
+    //console.log(existeGaceta2);
+    //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookUpload : existeGaceta 2");
+
+   // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX actions - context.beforeHookUpload");
+   // console.log(context)
+    //console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX actions - context.beforeHookUpload");
+  
     return {
       ...request,
       payload: otherParams,
@@ -436,32 +663,15 @@ const beforeHookUpload = async (request, context) => {
   return request;
 };
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-const beforeHookPassword = async (request, context) => {
-  if (request.method == 'post') {
-    const { password, ...otherParams } = request.payload;
-
-    if (password) {
-      const hashPassword = await argon2.hash(password);
-
-      return {
-        ...request,
-        payload: {
-          ...otherParams,
-          encryptedPassword: hashPassword,
-        },
-      };
-    }
-
-    return request;
-  }
-};
-  
   const afterHookPassword = async (response, context) => {
     if (response.record && response.record.errors) {
       response.record.errors.password = response.record.errors.encryptedPassword;
     }
+    // const existeGaceta3=  await Gaceta.findOne({ NumberId: record.params.NumberId }).exec();
+    // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO afterHookPassword : existeGaceta3 3");
+    // console.log(existeGaceta3);
+    // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO afterHookPassword : existeGaceta3 3");
+
     return response;
   };
 

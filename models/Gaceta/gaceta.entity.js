@@ -25,7 +25,9 @@ const GacetaSchema = new mongoose.Schema({
       type: Date
     }, 
     profileExcelLocation: {
-      type: String
+      type: String,
+      
+
     }, 
 
   });

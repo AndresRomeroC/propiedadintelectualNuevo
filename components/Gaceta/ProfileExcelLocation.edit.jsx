@@ -9,7 +9,7 @@ const ProfileExcelLocation = ({ property, record, onChange }) => {
     onChange(property.name, files[0]);
    };
   const uploadedPhoto = record.params.profileExcelLocation;
-console.log(record);
+
   return (
     <Box>      
       <Label>{property.label}</Label>

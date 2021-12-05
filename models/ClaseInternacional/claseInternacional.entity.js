@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ClaseInternacionalSchema = new mongoose.Schema({
     ClassInt: {
-      type: Number,
+      type: String,
       required: true
     },
     Description: {

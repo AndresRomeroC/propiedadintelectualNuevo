@@ -18,11 +18,16 @@
     //   } 
     // },
 
-    const AdminBro = require('admin-bro');
+const AdminBro = require('admin-bro');
 const { Gaceta } = require('./gaceta.entity');
+//const { ValidationError } = require ('./validation/ValidationError');
+
+const { ValidationError } = require ('admin-bro');
+
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
 const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload} = require('../../hooks/gaceta.hooks');
+const { default: adminBro } = require('admin-bro');
 
 
 
@@ -42,6 +47,11 @@ const options = {
     profileExcelLocation: {
       isVisible: true,
     },
+    existeGaceta: {
+      type: Number,
+      isVisible: false,
+    },
+
     UploadDate: {
       type: 'date',
       isVisible: {
@@ -51,7 +61,7 @@ const options = {
     
     profileExcelLocation: {
       components: {
-        //edit: AdminBro.bundle('../../components/User/holaMundo.jsx'),
+        new: AdminBro.bundle('../../components/Gaceta/ProfileExcelLocation.edit.jsx'),
         edit: AdminBro.bundle('../../components/Gaceta/ProfileExcelLocation.edit.jsx'),
         list: AdminBro.bundle('../../components/Gaceta/Avatar.list.jsx'),
         show: AdminBro.bundle('../../components/Gaceta/Avatar.list.jsx'),
@@ -83,6 +93,23 @@ const options = {
         before: async (request, context) => {
           const modifiedRequest = await beforeHookPassword(request, context);
   
+          // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX actions - INICIO beforeHookPassword : existeGaceta 1");
+          // console.log(modifiedRequest.payload.existeGaceta)
+           console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX actions - context.params");
+           console.log(context.params)
+           console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX actions - context.params");
+         
+            if (modifiedRequest.payload.existeGaceta ){
+                  if (modifiedRequest.payload.existeGaceta.NumberId) {
+                throw new AdminBro.ValidationError({
+                  name: {
+                    message: 'Error al Guardar Gaceta Nueva',
+                  },
+                }, {
+                  message: `Gaceta número ${modifiedRequest.payload.existeGaceta.NumberId} ya existe, genere un nuevo número`,
+                })
+              }
+            }
           return beforeHookUpload(request, context, modifiedRequest);
         },
         after: async (response, request, context) => {
