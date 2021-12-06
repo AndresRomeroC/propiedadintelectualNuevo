@@ -228,8 +228,6 @@ const afterHookUpload = async (response, context) => {
 
 const afterNewHookUpload = async (response, context) => {
   
-
-  //
     // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO response ===== > ");
     // console.log(response);
     // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FINresponse ===== > ");
@@ -245,10 +243,11 @@ const afterNewHookUpload = async (response, context) => {
 
     const { record, profileExcelLocation } = context;
   
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
-    record.params.profileExcelLocation = context.profileExcelLocation.path;
-    console.log(record);
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx fin record ===== > ");
+    //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
+    
+    
+    //console.log(record);
+    //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx fin record ===== > ");
 
     // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO record ===== > ");
     // console.log(record);
@@ -258,7 +257,8 @@ const afterNewHookUpload = async (response, context) => {
     //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXXXXXXXXXXXX");
   
     if (profileExcelLocation) {
-      
+      if(context.profileExcelLocation.path)
+      record.params.profileExcelLocation = context.profileExcelLocation.path;
       //await rimraf.sync(record.params.avatar.substring(0));
 
       //record.params.profileExcelLocation = profileExcelLocation.name;
@@ -280,9 +280,9 @@ const afterNewHookUpload = async (response, context) => {
 
 
     //const filePath = path.join('uploads', record.id().toString(), profileExcelLocation.name);
-    const filePath = path.join('uploads', record.params.NumberId.toString(), profileExcelLocation.name);
+    const filePath = path.join('uploads\\Gaceta', record.params.NumberId.toString(), profileExcelLocation.name);
     
-      console.log(filePath);
+      //console.log(filePath);
   
       //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx console.log(record.id().toString()); ===== > ");
       //console.log(record.id().toString());
@@ -312,8 +312,8 @@ const afterNewHookUpload = async (response, context) => {
         if (err) throw err;
       });
   
-      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx rename 2 : filePath");
-      console.log(filePath);
+      //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx rename 2 : filePath");
+      //console.log(filePath);
       
   
       //await record.update({ profileExcelLocation: `/${filePath}` });
@@ -353,211 +353,213 @@ const afterNewHookUpload = async (response, context) => {
         //D:\adminbro\propiedadintelectualNuevo
         //const pathExcel = `D:\\adminbro\\propiedadintelectualNuevo\\${filePath}`;
       
+      await record.update({ profileExcelLocation: `/${filePath}` });
+
       const pathExcel = profileExcelLocation.path ;
       
-        const workbook = XLSX.readFile(pathExcel);
-        var nombreHoja = workbook.SheetNames;
-        let datos = XLSX.utils.sheet_to_json(workbook.Sheets[nombreHoja[0]]);
-  
-        //console.log(workbook.Sheets[nombreHoja[0]]);
-  
-        //const jDatos = [];
-        for (let i = 0; i < datos.length; i++) {
+
+      const validaExtensionExcel = profileExcelLocation.name ;
+
+      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx pathExcel comienza, el cual debe tener el nombre del archivo ");
+      console.log(validaExtensionExcel);
+      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx pathExcel termina");
+
+      // validar si el documento corresponde a un excel.
+      let esDocumentoPermitido = false;
+      if(pathExcel){
+        //new Array(".gif", ".jpg", ".doc", ".pdf");
+        const extensiones_permitidas = new Array(".xlsx");
+        //recupero la extensión de este nombre de archivo
+        const extension = (validaExtensionExcel.substring(validaExtensionExcel.lastIndexOf("."))).toLowerCase();
+        for (let i = 0; i < extensiones_permitidas.length; i++) {
           
-          const dato = datos[i];
-          
-          const denominacionCompleta = dato.denominacionCompleta;
-          const titular = dato.titular;
-          const query = { titular, denominacionCompleta};
-  
-          //verifica existencia de Marca
-          // let existeMarca =   Marca.exists({ titular }, function(err, result) {
-          //                         if (err) {
-          //                           console.log("Something wrong when updating data!");
-          //                         } else {
-          //                           console.log(result);
-          //                         }
-          //                       });
-  
-  
-  
-          //let existeMarca =   Marca.where(query);
-  
-  
-          //console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i}`);
-
-          //console.log(dato);
-
-          if(dato.claseInternacional){
-
-            // function findOneC(query) {
-            //   return new Promise((resv, rej) => {
-            //     ClaseInternacional.findOne(query, (err, res) => {
-            //     if(err) {
-            //       console.log("problemas al buscar la clase internacional");
-
-            //     }
-            //     console.log('no hay clase internacional'); 
-            //     })
-            //   })
-            // }  
-
-            //   const existeClaseInternacional=  findOneC({ ClassInt: datos.claseInternacional } );
-                                         
-            // const existeClaseInternacional =  ClaseInternacional.findOne({ ClassInt: dato.claseInternacional })
-            //   .then((result) => {
-            //     return result
-            //   })
-            //   .catch(err => {
-            //     console.log("Errores al consultar Clase internacional");
-            //   })
-            //const existeClaseInternacional =  ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
+          console.log(extension);
+          if (extensiones_permitidas[i] == extension) {
+            esDocumentoPermitido = true;
+            break;
+          }
+        }
+        console.log(`es documento permitido ${esDocumentoPermitido}`);
+        if(esDocumentoPermitido){
+          const workbook = XLSX.readFile(pathExcel);
+          const nombreHoja = workbook.SheetNames;
+          let datos = XLSX.utils.sheet_to_json(workbook.Sheets[nombreHoja[0]]);
+          const jDatos = [];
+          for (let i = 0; i < datos.length; i++) {
             
+            const dato = datos[i];
             
-            //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  dato.claseInternacionalId");
-            //console.log(dato.claseInternacional);
-            //const existeClaseInternacional =  await ClaseInternacional.findOne({ ClassInt: typeof parseInt(dato.claseInternacional) }).exec()
-            const existeClaseInternacional = await ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
+            const denominacionCompleta = dato.denominacionCompleta;
+            const titular = dato.titular;
+            const query = { titular, denominacionCompleta};
+    
+            //verifica existencia de Marca
+            // let existeMarca =   Marca.exists({ titular }, function(err, result) {
+            //                         if (err) {
+            //                           console.log("Something wrong when updating data!");
+            //                         } else {
+            //                           console.log(result);
+            //                         }
+            //                       });
 
-            // existeClaseInternacional.then(function(result){
-            //   console.log(result)
-            //   })
-              
-              //const existeClaseInternacional= await  ClaseInternacional.where({ ClassInt: datos.claseInternacionalId });
+            //let existeMarca =   Marca.where(query);
 
+            //console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i}`);
+            //console.log(dato);
 
-              //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  existeClaseInternacional");
-              //console.log(existeClaseInternacional);
+            if(dato.claseInternacional){
+
+              // function findOneC(query) {
+              //   return new Promise((resv, rej) => {
+              //     ClaseInternacional.findOne(query, (err, res) => {
+              //     if(err) {
+              //       console.log("problemas al buscar la clase internacional");
+
+              //     }
+              //     console.log('no hay clase internacional'); 
+              //     })
+              //   })
+              // }  
+
+              //   const existeClaseInternacional=  findOneC({ ClassInt: datos.claseInternacional } );
+                                          
+              // const existeClaseInternacional =  ClaseInternacional.findOne({ ClassInt: dato.claseInternacional })
+              //   .then((result) => {
+              //     return result
+              //   })
+              //   .catch(err => {
+              //     console.log("Errores al consultar Clase internacional");
+              //   })
+              //const existeClaseInternacional =  ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
               
               
-             // console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i} : existeClaseInternacional.ClassInt`);
-              
-              if(existeClaseInternacional){
-                //console.log(existeClaseInternacional._id);
-                dato.claseInternacionalId = existeClaseInternacional._id;
+              //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  dato.claseInternacionalId");
+              //console.log(dato.claseInternacional);
+              //const existeClaseInternacional =  await ClaseInternacional.findOne({ ClassInt: typeof parseInt(dato.claseInternacional) }).exec()
+              const existeClaseInternacional = await ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
+
+              // existeClaseInternacional.then(function(result){
+              //   console.log(result)
+              //   })
+                
+                //const existeClaseInternacional= await  ClaseInternacional.where({ ClassInt: datos.claseInternacionalId });
+
+                //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  existeClaseInternacional");
+                //console.log(existeClaseInternacional);
+
+              // console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i} : existeClaseInternacional.ClassInt`);
+                
+                if(existeClaseInternacional){
+                  //console.log(existeClaseInternacional._id);
+                  dato.claseInternacionalId = existeClaseInternacional._id;
+                }
+            }
+
+            //console.log(existeMarca);
+    
+            //  if( existeMarca == null ){
+            //      console.log(" entra al else"); 
+            //    //Marca.insertMany(dato, function(error, docs) {});
+    
+            //    Marca.insertMany(dato).then(function(){
+            //      console.log("Data inserted")  // Success
+            //    }).catch(function(error){
+            //        console.log(error)      // Failure
+            //    });
+            //  }else{
+    
+            Marca.findOneAndUpdate(query, {$set:{tipoEstados:"Caducidad del trámite de renovación"}}, {new: true}, (err, result) => {
+              if (err) {
+                  console.log("Something wrong when updating data!");
+                  Gaceta.deleteOne({
+                    _id: record.id()
+                  })
+                    .then(() => {
+                      console.log('Gaceta Deleted!'); 
+                    })
+                    .catch(err => {
+                      console.log("problemas al borrar la gaceta nueva");
+                    })
               }
-           }
+              
+              if( result == null ){
 
-          //console.log(existeMarca);
-  
-          //  if( existeMarca == null ){
-          //      console.log(" entra al else"); 
-          //    //Marca.insertMany(dato, function(error, docs) {});
-  
-          //    Marca.insertMany(dato).then(function(){
-          //      console.log("Data inserted")  // Success
-          //    }).catch(function(error){
-          //        console.log(error)      // Failure
-          //    });
-          //  }else{
-  
-              Marca.findOneAndUpdate(query, {$set:{tipoEstados:"Caducidad del trámite de renovación"}}, {new: true}, (err, result) => {
-                if (err) {
-                    console.log("Something wrong when updating data!");
+                //console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i} : record info`);
+                //console.log(record);
+
+                if(record.id()) 
+                dato.gacetaId = record.id().toString();
+
+                Marca.insertMany(dato).then(function(){
+                  console.log("Data inserted")  // Success
+                }).catch(function(error){
+                    console.log(error)      // Failure
+                    //Gaceta.deleteOne({ NumberId: record.params.NumberId }).exec();
+
                     Gaceta.deleteOne({
                       _id: record.id()
-                     })
+                    })
                       .then(() => {
                         console.log('Gaceta Deleted!'); 
                       })
                       .catch(err => {
                         console.log("problemas al borrar la gaceta nueva");
                       })
-                }
-                
-                if( result == null ){
 
-                  //console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i} : record info`);
-                  //console.log(record);
-
-                  if(record.id()) 
-                  dato.gacetaId = record.id().toString();
-
-                  Marca.insertMany(dato).then(function(){
-                    console.log("Data inserted")  // Success
-                  }).catch(function(error){
-                      console.log(error)      // Failure
-                      //Gaceta.deleteOne({ NumberId: record.params.NumberId }).exec();
-
-                      Gaceta.deleteOne({
-                        _id: record.id()
-                       })
-                        .then(() => {
-                          console.log('Gaceta Deleted!'); 
-                        })
-                        .catch(err => {
-                          console.log("problemas al borrar la gaceta nueva");
-                        })
-
-                  });
-                }
-                    console.log(result);
-              });
-          //}
-  
-          // console.log(" salio del if else"); 
-          // jDatos.push({
-          //   ...dato,
-          //   //Fecha: new Date((dato.Fecha - (25567 + 2)) * 86400 * 1000)
-          // });
+                });
+              }
+                  console.log(result);
+            });
+            //}
+    
+            // console.log(" salio del if else"); 
+            // jDatos.push({
+            //   ...dato,
+            //   //Fecha: new Date((dato.Fecha - (25567 + 2)) * 86400 * 1000)
+            // });
+          }
         }
-        //console.log(jDatos);
-      //}
-  
+      }
+
   /*
-  
-      //BUSCA GACETA POR ID; devuelve un arreglo con el objeto completo
-      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  BUSCA GACETA POR ID; devuelve un arreglo con el objeto completo");
-      const gacetaDB = await  Gaceta.where({ NumberId: record.params.NumberId });
-      console.log(gacetaDB);
-  
-      //BUSCA GACETA POR ID; devuelve el objeto completo
-      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx BUSCA GACETA POR ID; devuelve el objeto completo");
-      // { NumberId: 9999999999 } // devuelve null
-      const gacetita=  await Gaceta.findOne({ NumberId: record.params.NumberId }).exec();
-      console.log(gacetita);
-      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Fin Gaceta de la DB2");
-  
-      // //BUSCA MARCA POR denominacionCompleta, titular y actualiza; 
-      const denominacionCompleta = 'DISTRIBUIDORA DE CONBUSTIBLES VIGUESAM Cia Ltda';
-      const titular = '  DISTRIDUIDORA DE COMBUSTIBLES VIGUESAM CIA LTDA';
-      const query = { titular, denominacionCompleta};
-      Marca.findOneAndUpdate(query, {$set:{tipoEstados:"En trámite"}}, {new: true}, (err, doc) => {
-        if (err) {
-            console.log("Something wrong when updating data!");
-        }
-            console.log(doc);
-      });
-  
-  
-  
-  
+    //BUSCA GACETA POR ID; devuelve un arreglo con el objeto completo
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  BUSCA GACETA POR ID; devuelve un arreglo con el objeto completo");
+    const gacetaDB = await  Gaceta.where({ NumberId: record.params.NumberId });
+    console.log(gacetaDB);
+
+    //BUSCA GACETA POR ID; devuelve el objeto completo
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx BUSCA GACETA POR ID; devuelve el objeto completo");
+    // { NumberId: 9999999999 } // devuelve null
+    const gacetita=  await Gaceta.findOne({ NumberId: record.params.NumberId }).exec();
+    console.log(gacetita);
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Fin Gaceta de la DB2");
+
+    // //BUSCA MARCA POR denominacionCompleta, titular y actualiza; 
+    const denominacionCompleta = 'DISTRIBUIDORA DE CONBUSTIBLES VIGUESAM Cia Ltda';
+    const titular = '  DISTRIDUIDORA DE COMBUSTIBLES VIGUESAM CIA LTDA';
+    const query = { titular, denominacionCompleta};
+    Marca.findOneAndUpdate(query, {$set:{tipoEstados:"En trámite"}}, {new: true}, (err, doc) => {
+      if (err) {
+          console.log("Something wrong when updating data!");
+      }
+          console.log(doc);
+    });
+
     // console.log(result);
-      console.log(query);
+    console.log(query);
+
+    // // busca por titular y devuelve denominacion completa.
+    // const marcaDB = Marca.findOne({ titular: titular }, { denominacionCompleta: denominacionCompleta } );
+
+    // // si la encuentra actualiza a estado Publicada
+    // //Marca.updateOne({ { titular: titular }, { denominacionCompleta: denominacionCompleta } }, { $set: { tipoEstado: 'Publicada' }}); // executed
+
+    // //Marca.updateOne({phone:request.phone}, {$set: { phone: request.phone }}, {upsert: true}, function(err){...}
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Marca de la DB");
+    // console.log(marcaDB);
+    // //const postal = await post.insertMany(record.params.post)
+    */
   
-  
-      // // busca por titular y devuelve denominacion completa.
-      // const marcaDB = Marca.findOne({ titular: titular }, { denominacionCompleta: denominacionCompleta } );
-  
-      // // si la encuentra actualiza a estado Publicada
-      // //Marca.updateOne({ { titular: titular }, { denominacionCompleta: denominacionCompleta } }, { $set: { tipoEstado: 'Publicada' }}); // executed
-  
-  
-      
-  
-      // //Marca.updateOne({phone:request.phone}, {$set: { phone: request.phone }}, {upsert: true}, function(err){...}
-  
-  
-  
-      // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Marca de la DB");
-  
-      // console.log(marcaDB);
-  
-  
-  
-      // //const postal = await post.insertMany(record.params.post)
-  
-      */
     }
     return response;
   };
@@ -574,9 +576,12 @@ const beforeHookPassword = async (request, context) => {
     // console.log(NumberId);
     // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX FIN beforeHookPassword : request 1");
 
-    const existeGaceta=  await Gaceta.findOne({ NumberId: NumberId }).exec();
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX INICIO beforeHookPassword : existeGaceta 1");
+    const existeGaceta =  await Gaceta.findOne({ NumberId: NumberId }).exec();
     
+    
+    // const existeArchivoExcel = context.profileExcelLocation.path;
+    // console.log("XXXXXXXXXXXXXXXXXXXXXXXXXX existeArchivoExcel");
+    // console.log(existeArchivoExcel);
     
     //  if (existeGaceta) {
     //    throw new ValidationError({
@@ -594,7 +599,8 @@ const beforeHookPassword = async (request, context) => {
         payload: {
           ...otherParams,
           encryptedPassword: hashPassword,
-          existeGaceta
+          existeGaceta,
+          //existeArchivoExcel
         },
       };
     }
@@ -603,7 +609,8 @@ const beforeHookPassword = async (request, context) => {
       ...request,
       payload: {
         ...otherParams,
-        existeGaceta
+        existeGaceta,
+//existeArchivoExcel
       },
     };
   }

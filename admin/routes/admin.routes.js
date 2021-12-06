@@ -7,7 +7,7 @@ const bcrypt           = require('bcrypt');
 const AdminBro = require('admin-bro');
 const AdminBroExpress = require('@admin-bro/express');
 const AdminBroMongoose = require('@admin-bro/mongoose');
-const argon2 = require('argon2');
+//const argon2 = require('argon2');
 
 AdminBro.registerAdapter(AdminBroMongoose);
 

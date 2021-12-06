@@ -114,6 +114,10 @@ const MarcaSchema = new mongoose.Schema({
       type: mongoose.SchemaTypes.ObjectId,      
       ref: 'Gaceta',
     },
+    documentoAdjunto:String,
+    fechaCreacion: {
+      type: Date, default: Date.now()
+    },
     // content: {
     //   type: String,
     // }, 

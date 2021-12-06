@@ -38,13 +38,11 @@ const ClaseInternacional     = require('../../models/ClaseInternacional/claseInt
 
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
-//AdminBro.registerAdapter(mongooseAdminBro);
-
-
+AdminBro.registerAdapter(mongooseAdminBro);
 const AdminBroOptions = {
   //{ currentAdmin },
-  //databases: [mongoose],
-  //rootPath: '/admin',
+  databases: [mongoose],
+  rootPath: '/admin',
   resources: [
     Marca,
     Gaceta,

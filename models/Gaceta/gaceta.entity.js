@@ -24,11 +24,8 @@ const GacetaSchema = new mongoose.Schema({
     PublicationDate: {
       type: Date
     }, 
-    profileExcelLocation: {
-      type: String,
-      
+    profileExcelLocation: String,
 
-    }, 
 
   });
   

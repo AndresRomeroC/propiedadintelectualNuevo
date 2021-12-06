@@ -2,7 +2,7 @@ require('dotenv').config();
 const path             = require('path');
 const express          = require('express');
 const AdminBro         = require('admin-bro');
-const bodyParser = require('body-parser');
+
 //Initiliazations
 app = express();
 const connection = require('./src/config/db.config');

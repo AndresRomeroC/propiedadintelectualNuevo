@@ -1,0 +1,74 @@
+blue bear
+
+
+node.js
+
+cliente, buffet de abogados de quito.
+Propiedad intelectual de los clientes,
+
+SENADI También regristra propiedades intelectuales,
+los buffetts tramitan ese trabajo, tienen histórico de todo lo que sube el SENADI,  
+negocian bajas de otros logos para subir mis logos. El rol de buffet LEX VALOR, revisa verifica 
+que no existan otras insituciones o empresas que no exista en propiedad intelectual....
+
+adminbro / node.js
+
+LEX VALOR, tiene el registro de todos los clientes que maneja, plataforma sirve para CRUD de clientes.
+sirve como bitacora para registrar marcas nuevas.
+
+SENADI ABIERTO AL PUBULICO
+   
+hay un gazeta de chorizo de registros de marcas, donde sale la actualización de la información de como van
+los procesos de marcas y propiedades intelectuales
+
+modulo de importacion para cargar la gazeta (excel de marcas nueva
+
+plus+, la carga de la gaceta, debe verificar cosas que ya existen con lo nuevo... el sistema debe alertarme lo que
+ya existe, debe avisar lo que la gaceta muestra no tenga conlictos con lo que tiene LEX VALOR
+
+TITULAR _ QUIEN REGISTRO LA MARCA
+DENOMINACION COMPLETA - LA PALABRA
+
+BASE IMPORTADA
+
+*- CAMBIAR ETIQUETAS A ESPAÑOL
+*- APENAS HAGA LOGIN reeenviar a marcas.
+*- Seguimiento de pantallas a google analytics.
+*- CREAR Módulo de importación de gacetas(excel). asociar a que gaceta pertenece la marca.
+*- cada vez que se borre una gaceta, se deben borrar las gacetas.
+*- el excel puede venir con errores.el senadi publica pdf, no excel. el excel puede tener errrores
+*- 473mil marca que ya existen, 
+*- nivel de sensiblidad de los primero 4 caracteres, siempre y cuando sea registrada por mi cliente u otr persona
+y coincida con mi cliente.
+*- nivel de sensiblidad, reportar en el resumen.COMPARACIONES.
+*- al importar, no solamente comparar coincidencias , el texto y el titular ya se encuentra registrado, mostrar
+y avisar que ya fue registrado.
+*- regsistrar notificaciones., MIS MARCAS.llevar bitacoras.
+*- mis marcas. solo las marcas de LEX VALOR
+*- REGISTRO Y RENOVACIÓN. senadi le notifica a LEX VALOR, que su marca ya está registrada.
+*- verficar que mis marcas no estén próximas a vencer, alado mostrarme algún warnigng que me avise que ya está próximo a vencer
+*- mostrar en banner cuantas marcas están por vencer
+
+
+11/NOVIEMBRE
+
+- CANALES DE COMUNICIÓN : GRUPAL DE WHATSSAPP
+- ALCANCE DE PROYECTO : bajarse lo publicado en GitHub
+- FECHAS DE REVISIÓN
+
+
+en la gaceta, si en el excel ya existe en mis marcas y es mi cliente, entonces no permite y notifica
+en la gaceta, si ya existe la misma palabra, si el que la ingresa. es una publicaciòn de las peticiones
+de los clientes a nivel nacional. para que pueda ser impugnado, si no es impugando entonces podrìa ser aceptado.
+
+
+en la gaceta, existen las marcas publicadas, publicadas son las que han querido registrar. solicitudes de marcas de PI.
+y desde ahì corren los 2 meses a esperas de impugnaicones. le notiifica a LEXVALOR.
+la plataforma va a detectar si estàn solicitando algo que ya existe en LEXVALOR.
+
+debe notificar las coincidencias de mis clientes, cambiar estados de marcas, si es pedidda por lex valor, 
+se pone estado en tramite.
+
+comparacion  :  denominaciòn completa.
+
+
