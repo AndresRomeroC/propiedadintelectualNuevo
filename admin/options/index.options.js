@@ -40,9 +40,10 @@ const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'a
 
 AdminBro.registerAdapter(mongooseAdminBro);
 const AdminBroOptions = {
-  //{ currentAdmin },
+  //currentAdmin,
   databases: [mongoose],
   rootPath: '/admin',
+  //loginPath: '/admin/resource',
   resources: [
     Marca,
     Gaceta,
@@ -113,6 +114,7 @@ const AdminBroOptions = {
 
     softwareBrothers: false,
     logo: "/logo-lexvalor.png"
+  
   },
   locale : {translations}
 };

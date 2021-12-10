@@ -58,7 +58,9 @@ const options = {
         list: true, edit: false, filter: true, show: true,
       },
     },
-    
+    similitudExacta:{
+      component:  AdminBro.bundle('../../components/Gaceta/SimilitudExacta.jsx'),
+    },
     profileExcelLocation: {
       components: {
         new: AdminBro.bundle('../../components/Gaceta/ProfileExcelLocation.edit.jsx'),
@@ -75,7 +77,15 @@ const options = {
   actions: {
       edit: { 
         isAccessible: onlyAdmin,
-        
+           
+
+       
+        // if (passport.session.user) {
+        //   req.session.adminUser = passport.session.user
+        //   }
+
+
+
         before: async (request, context) => {
           const modifiedRequest = await beforeHookPassword(request, context);
   
@@ -112,7 +122,7 @@ const options = {
             }
 
              console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx fin request");
-             console.log(request.payload.profileExcelLocation );
+             console.log(request );
              console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx inicio request");
 
             if (request.payload.profileExcelLocation == null){
@@ -167,6 +177,7 @@ const options = {
         },
        },
   },
+  ////showProperties, editProperties and filterProperties.
   listProperties: ['NumberId', 'Year', 'Month',
   'Quincena','UploadDate','PublicationDate'],
 };

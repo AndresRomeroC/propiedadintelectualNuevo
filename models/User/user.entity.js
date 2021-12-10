@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-    Name: {
+    name: {
       type: String,
       maxLength: [100, 'Superaste el máximo de caracteres permitidos'],
     },
-    Email: {
+    email: {
       type: String,
       maxLength: [100, 'Superaste el máximo de caracteres permitidos'],
     }, 

@@ -25,6 +25,24 @@ const GacetaSchema = new mongoose.Schema({
       type: Date
     }, 
     profileExcelLocation: String,
+    totalRegistrosImportados: {
+      type: Number,
+    },
+    conSimilitudExacta: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Marca',
+      },
+    ],
+    conSimilitudMedia: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Marca',
+      },
+    ],
+    sinSimilitud: {
+      type: Number,
+    },
 
 
   });

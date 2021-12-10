@@ -20,8 +20,8 @@ const buildAdminRouter = (admin) => {
         {
             cookieName: 'admin-bro',
             cookiePassword: 'superlongandcomplicatedname',
-            authenticate: async (Email, password) => {
-                const user = await User.findOne({ Email }); 
+            authenticate: async (email, password) => {
+                const user = await User.findOne({ email }); 
                 
                 if (user) {
                     const matched = await bcrypt.compare(password, user.encryptedPassword)

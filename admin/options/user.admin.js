@@ -116,17 +116,18 @@ const optionUser = {
         isAccessible: onlyAdmin,
         before: async (request) => {
             if(request.payload.password) {
-            request.payload = {
-                ...request.payload,
-                encryptedPassword: await bcrypt.hash(request.payload.password, 10),
-                password: undefined,
-            }
+              request.payload = {
+                  ...request.payload,
+                  encryptedPassword: await bcrypt.hash(request.payload.password, 10),
+                  password: undefined, //ARC 
+                  //password : password
+              }
             }
             return request
         },
         }
     },
-    listProperties: ['Name','Email','Role'],
+    listProperties: ['name','email','Role'],
     
 };
 

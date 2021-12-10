@@ -93,6 +93,7 @@ const PropiedadIntelectualNav = {
         delete: { isAccessible: onlyAdmin },
 
     },
+    //showProperties, editProperties and filterProperties.
     listProperties: ['titular', 'denominacionCompleta', 'claseInternacionalId',
     'fechaSolicitud','numeroSolicitud','fechaTitulo','numeroTitulo','gacetaId'],
   

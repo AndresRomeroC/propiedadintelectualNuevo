@@ -9,9 +9,6 @@ const AdminBro = require('admin-bro');
 const  { MarcaSchema, Marca }                                = require('../models/Marca/marca.entity');
 const  { GacetaSchema, Gaceta }                              = require('../models/Gaceta/gaceta.entity');
 const  { ClaseInternacionalSchema, ClaseInternacional }      = require('../models/ClaseInternacional/claseInternacional.entity');
-const  { CustomerSchema, Customer }      = require('../models/Customer/customer.entity');
-
-
 const { ObjectId } = require('mongoose/lib/schema/index');
 
 
@@ -382,85 +379,95 @@ const afterNewHookUpload = async (response, context) => {
             break;
           }
         }
-
-        let totalRegistrosImportados = 0;
-        let totalRegistrosConSimilitudExacta = 0;
-        let arrConSimilitudExacta = new Array();
-
-        let totalRegistrosConSimilitudMedia = 0;
-        let totalRegistrosSinSimilitud = 0;
-
         console.log(`es documento permitido ${esDocumentoPermitido}`);
         if(esDocumentoPermitido){
           const workbook = XLSX.readFile(pathExcel);
           const nombreHoja = workbook.SheetNames;
           let datos = XLSX.utils.sheet_to_json(workbook.Sheets[nombreHoja[0]]);
           const jDatos = [];
-
-          const forma1 = false;
-            const forma2 = false;
-            const forma3 = true;
-
-
           for (let i = 0; i < datos.length; i++) {
             
             const dato = datos[i];
             
-            // const denominacionCompleta = dato.denominacionCompleta;
-            // const titular = dato.titular;
-            // const query = { titular, denominacionCompleta};
+            const denominacionCompleta = dato.denominacionCompleta;
+            const titular = dato.titular;
+            const query = { titular, denominacionCompleta};
+    
+            //verifica existencia de Marca
+            // let existeMarca =   Marca.exists({ titular }, function(err, result) {
+            //                         if (err) {
+            //                           console.log("Something wrong when updating data!");
+            //                         } else {
+            //                           console.log(result);
+            //                         }
+            //                       });
 
-            const numeroSolicitud = dato.numeroSolicitud;
-            const query = { numeroSolicitud };
+            //let existeMarca =   Marca.where(query);
 
-            
+            //console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i}`);
+            //console.log(dato);
 
-            if(dato.claseInternacional){              
-              const existeClaseInternacional = await ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
-              if(existeClaseInternacional){
-                //console.log(existeClaseInternacional._id);
-                dato.claseInternacionalId = existeClaseInternacional._id;
-              }
-            }
+            if(dato.claseInternacional){
 
-            // Validacion de denominacion completa y titular
-            const conSimilitudExacta = await Marca.findOne({ denominacionCompleta: dato.denominacionCompleta }).exec()
-            let esTitularLexValor = null;
-            if(conSimilitudExacta){
-              console.log(`----------------------------------------------------------------------------- conSimilitudExacta-----${[i]}`);
-                  console.log(conSimilitudExacta);
-              //verificar si el titular es de LexValor
-              esTitularLexValor = await Customer.findOne({ Name: conSimilitudExacta.titular }).exec()
-              console.log('--------------------------------------- : esTitularLexValor 1');
-              if(esTitularLexValor) console.log(esTitularLexValor); 
-              console.log('--------------------------------------- ');
-              if(forma1){
+              // function findOneC(query) {
+              //   return new Promise((resv, rej) => {
+              //     ClaseInternacional.findOne(query, (err, res) => {
+              //     if(err) {
+              //       console.log("problemas al buscar la clase internacional");
 
-                let esMarcaParaPublicar = await Marca.findOne(query).exec()
-                console.log('--------------------------------------- esMarcaParaPublicar 5');
-                console.log(esMarcaParaPublicar);
-                if(esMarcaParaPublicar == null){
+              //     }
+              //     console.log('no hay clase internacional'); 
+              //     })
+              //   })
+              // }  
 
-                      totalRegistrosConSimilitudExacta++;
-
-                      console.log('--------------------------------------- totalRegistrosConSimilitudExacta 5');
-                      console.log(totalRegistrosConSimilitudExacta);
-                      console.log('--------------------------------------- arrConSimilitudExacta 5');
-                      arrConSimilitudExacta.push(conSimilitudExacta);
-                }
-                
-              }
-
-
+              //   const existeClaseInternacional=  findOneC({ ClassInt: datos.claseInternacional } );
+                                          
+              // const existeClaseInternacional =  ClaseInternacional.findOne({ ClassInt: dato.claseInternacional })
+              //   .then((result) => {
+              //     return result
+              //   })
+              //   .catch(err => {
+              //     console.log("Errores al consultar Clase internacional");
+              //   })
+              //const existeClaseInternacional =  ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
               
-            }
-            let nuevaMarca = null;
-            // validacion de denominacion completa  de  6 caracteres y titular
+              
+              //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  dato.claseInternacionalId");
+              //console.log(dato.claseInternacional);
+              //const existeClaseInternacional =  await ClaseInternacional.findOne({ ClassInt: typeof parseInt(dato.claseInternacional) }).exec()
+              const existeClaseInternacional = await ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
 
-            // si no hay similitudes enotnces es sin similitud
-            
-            // encuentra marcas con el mismo numero de solicitud, si la encuentra la pone en estado PUBLICADA
-            // Si no encuentra entones la Guarda como Marca Nueva.
+              // existeClaseInternacional.then(function(result){
+              //   console.log(result)
+              //   })
+                
+                //const existeClaseInternacional= await  ClaseInternacional.where({ ClassInt: datos.claseInternacionalId });
+
+                //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  existeClaseInternacional");
+                //console.log(existeClaseInternacional);
+
+              // console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i} : existeClaseInternacional.ClassInt`);
+                
+                if(existeClaseInternacional){
+                  //console.log(existeClaseInternacional._id);
+                  dato.claseInternacionalId = existeClaseInternacional._id;
+                }
+            }
+
+            //console.log(existeMarca);
+    
+            //  if( existeMarca == null ){
+            //      console.log(" entra al else"); 
+            //    //Marca.insertMany(dato, function(error, docs) {});
+    
+            //    Marca.insertMany(dato).then(function(){
+            //      console.log("Data inserted")  // Success
+            //    }).catch(function(error){
+            //        console.log(error)      // Failure
+            //    });
+            //  }else{
+    
             Marca.findOneAndUpdate(query, {$set:{tipoEstados:"Publicada"}}, {new: true}, (err, result) => {
               if (err) {
                   console.log("Something wrong when updating data!");
@@ -473,133 +480,86 @@ const afterNewHookUpload = async (response, context) => {
                     .catch(err => {
                       console.log("problemas al borrar la gaceta nueva");
                     })
-              }              
+              }
+              
               if( result == null ){
+
+                //console.log(`xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  ${i} : record info`);
+                //console.log(record);
 
                 if(record.id()) 
                 dato.gacetaId = record.id().toString();
 
-
-                if(forma2){
-                  console.log(`----------------------------------------------------------------------------- conSimilitudExacta-----2`);
-                  console.log(conSimilitudExacta);
-                  console.log('--------------------------------------- : esTitularLexValor 2');
-                  if(esTitularLexValor) console.log(esTitularLexValor); 
-
-                  // Validacion de denominacion completa y titular
-                  if(conSimilitudExacta){
-                    console.log(`----------------------------------------------------------------------------- conSimilitudExacta-----3`);
-                    console.log(conSimilitudExacta);
-                    //verificar si el titular es de LexValor
-                    if(esTitularLexValor){
-                      console.log('--------------------------------------- : esTitularLexValor 3');
-                      console.log(esTitularLexValor);
-
-                      totalRegistrosConSimilitudExacta++;
-
-                      console.log('--------------------------------------- totalRegistrosConSimilitudExacta 4');
-                      console.log(totalRegistrosConSimilitudExacta);
-                      console.log('--------------------------------------- arrConSimilitudExacta 4');
-                      arrConSimilitudExacta.push(conSimilitudExacta);
-                      console.log(arrConSimilitudExacta);
-                      console.log('---------------------------------------------------------------------------------');
-
-                          //aqui actualizar
-                      console.log('--------------------------------------- arrConSimilitudExacta final');
-                      console.log(arrConSimilitudExacta);
-                    
-                      record.update({ conSimilitudExacta: arrConSimilitudExacta});
-
-                      console.log('---------------------------------------------------------------------------------');
-
-
-                    }
-                  }
-                }
-
-                // validacion de denominacion completa  de  6 caracteres y titular
-
-                // si no hay similitudes enotnces es sin similitud
-                // let documents = Object.keys(dato).map( key => {
-                //   return new Marca(   dato    );
-                // });
-
-                let documents = Object.keys({dato} ).map( key => {
-                     return new Marca(   {dato}   );
-                   });
-
-                   dato._id = documents[0]._id;
-                   console.log('--------------------------------------- Inicio nuevaMarca final : dato._id ');
-                   console.log(dato._id )  // Success
-                   console.log('--------------------------------------- Fin nuevaMarca final : dato._id ');
-
-                   if(forma3){
-                    console.log('--------------------------------------------------------------------------------- INICIO forma 3');
-                    // Validacion de denominacion completa y titular
-                    if(conSimilitudExacta){
-
-                      //verificar si el titular es de LexValor
-                      if(esTitularLexValor){
-
-  
-                        totalRegistrosConSimilitudExacta++;
-
-                        arrConSimilitudExacta.push(dato);
-
-
-                        // GUARDAR LA INFO CON CADA COINCIDENCIA
-                          record.update({ conSimilitudExacta: arrConSimilitudExacta});
-
-                        }
-                      }
-                    }
-
                 Marca.insertMany(dato).then(function(){
-                    console.log("Data inserted")  // Success
-                    //return nuevaMarca;
-                    //console.log(nuevaMarca)  
-                    //return (nuevaMarca);
-                    // si la nueva marca coincide, entonces es parte de la similitud
+                  console.log("Data inserted")  // Success
+                }).catch(function(error){
+                    console.log(error)      // Failure
+                    //Gaceta.deleteOne({ NumberId: record.params.NumberId }).exec();
 
-                  }).catch(function(error){
-                      console.log(error)      // Failure
-                      //Gaceta.deleteOne({ NumberId: record.params.NumberId }).exec();
-
-                      Gaceta.deleteOne({
-                        _id: record.id()
-                      })
+                    Gaceta.deleteOne({
+                      _id: record.id()
+                    })
                       .then(() => {
                         console.log('Gaceta Deleted!'); 
                       })
                       .catch(err => {
                         console.log("problemas al borrar la gaceta nueva");
                       })
-                  });
-                  
-                  console.log('--------------------------------------- Inicio nuevaMarca final : documents');
-                  console.log(documents)  // Success
-                  console.log('--------------------------------------- Fin nuevaMarca final : documents');
-                  
+
+                });
               }
-              
-                  //ARC
-                  //console.log(result);
-
+                  console.log(result);
             });
-            
+            //}
+    
+            // console.log(" salio del if else"); 
+            // jDatos.push({
+            //   ...dato,
+            //   //Fecha: new Date((dato.Fecha - (25567 + 2)) * 86400 * 1000)
+            // });
           }
-        
-        // //aqui actualizar
-         console.log('--------------------------------------- arrConSimilitudExacta final');
-        //             console.log(arrConSimilitudExacta);
-                   
-         record.update({ conSimilitudExacta: arrConSimilitudExacta});
-
-         console.log('---------------------------------------------------------------------------------');
-
-
         }
-      }  
+      }
+
+  /*
+    //BUSCA GACETA POR ID; devuelve un arreglo con el objeto completo
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  BUSCA GACETA POR ID; devuelve un arreglo con el objeto completo");
+    const gacetaDB = await  Gaceta.where({ NumberId: record.params.NumberId });
+    console.log(gacetaDB);
+
+    //BUSCA GACETA POR ID; devuelve el objeto completo
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx BUSCA GACETA POR ID; devuelve el objeto completo");
+    // { NumberId: 9999999999 } // devuelve null
+    const gacetita=  await Gaceta.findOne({ NumberId: record.params.NumberId }).exec();
+    console.log(gacetita);
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Fin Gaceta de la DB2");
+
+    // //BUSCA MARCA POR denominacionCompleta, titular y actualiza; 
+    const denominacionCompleta = 'DISTRIBUIDORA DE CONBUSTIBLES VIGUESAM Cia Ltda';
+    const titular = '  DISTRIDUIDORA DE COMBUSTIBLES VIGUESAM CIA LTDA';
+    const query = { titular, denominacionCompleta};
+    Marca.findOneAndUpdate(query, {$set:{tipoEstados:"En trámite"}}, {new: true}, (err, doc) => {
+      if (err) {
+          console.log("Something wrong when updating data!");
+      }
+          console.log(doc);
+    });
+
+    // console.log(result);
+    console.log(query);
+
+    // // busca por titular y devuelve denominacion completa.
+    // const marcaDB = Marca.findOne({ titular: titular }, { denominacionCompleta: denominacionCompleta } );
+
+    // // si la encuentra actualiza a estado Publicada
+    // //Marca.updateOne({ { titular: titular }, { denominacionCompleta: denominacionCompleta } }, { $set: { tipoEstado: 'Publicada' }}); // executed
+
+    // //Marca.updateOne({phone:request.phone}, {$set: { phone: request.phone }}, {upsert: true}, function(err){...}
+    // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Marca de la DB");
+    // console.log(marcaDB);
+    // //const postal = await post.insertMany(record.params.post)
+    */
+  
     }
     return response;
   };

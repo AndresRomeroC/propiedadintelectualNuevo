@@ -43,13 +43,15 @@
 const mongoose = require('mongoose');
 
 const MarcaSchema = new mongoose.Schema({
-    titular: {
+  denominacionCompleta: {
+    type: String,
+    required: true
+  },  
+  titular: {
       type: String,
       required: true
     },
-    denominacionCompleta: {
-      type: String,
-    },
+    
     claseInternacionalId: {
       type: mongoose.SchemaTypes.ObjectId,      
       ref: 'ClaseInternacional',
