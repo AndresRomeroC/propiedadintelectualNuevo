@@ -362,10 +362,17 @@ const afterNewHookUpload = async (response, context) => {
       
 
       const validaExtensionExcel = profileExcelLocation.name ;
+      let totalRegistrosImportados = 0;
+      let totalRegistrosConSimilitudExacta = 0;
+      let arrConSimilitudExacta = new Array();
 
-      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx pathExcel comienza, el cual debe tener el nombre del archivo ");
-      console.log(validaExtensionExcel);
-      console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx pathExcel termina");
+      let totalRegistrosConSimilitudMedia = 0;
+      let arrConSimilitudMedia = new Array();
+      let totalRegistrosSinSimilitud = 0;
+
+      //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx pathExcel comienza, el cual debe tener el nombre del archivo ");
+      //console.log(validaExtensionExcel);
+      //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx pathExcel termina");
 
       // validar si el documento corresponde a un excel.
       let esDocumentoPermitido = false;
@@ -376,21 +383,22 @@ const afterNewHookUpload = async (response, context) => {
         const extension = (validaExtensionExcel.substring(validaExtensionExcel.lastIndexOf("."))).toLowerCase();
         for (let i = 0; i < extensiones_permitidas.length; i++) {
           
-          console.log(extension);
+          //console.log(extension);
           if (extensiones_permitidas[i] == extension) {
             esDocumentoPermitido = true;
             break;
           }
         }
 
-        let totalRegistrosImportados = 0;
-        let totalRegistrosConSimilitudExacta = 0;
-        let arrConSimilitudExacta = new Array();
+        // let totalRegistrosImportados = 0;
+        // let totalRegistrosConSimilitudExacta = 0;
+        // let arrConSimilitudExacta = new Array();
 
-        let totalRegistrosConSimilitudMedia = 0;
-        let totalRegistrosSinSimilitud = 0;
+        // let totalRegistrosConSimilitudMedia = 0;
+        // let arrConSimilitudMedia = new Array();
+        // let totalRegistrosSinSimilitud = 0;
 
-        console.log(`es documento permitido ${esDocumentoPermitido}`);
+        //console.log(`es documento permitido ${esDocumentoPermitido}`);
         if(esDocumentoPermitido){
           const workbook = XLSX.readFile(pathExcel);
           const nombreHoja = workbook.SheetNames;
@@ -399,17 +407,22 @@ const afterNewHookUpload = async (response, context) => {
 
           const forma1 = false;
             const forma2 = false;
-            const forma3 = true;
+            const forma3 = false;
 
 
           for (let i = 0; i < datos.length; i++) {
             
-            const dato = datos[i];
+            let dato = datos[i];
+            totalRegistrosImportados++;
             
             // const denominacionCompleta = dato.denominacionCompleta;
             // const titular = dato.titular;
             // const query = { titular, denominacionCompleta};
 
+            /////////////////////////////////////////////////////////////////////////
+            // Para comparar si corresponde a una Marca previamente registrada
+            // que vendr[a] en una Gaceta, se considera el numeroSolicitud,es unico
+            /////////////////////////////////////////////////////////////////////////
             const numeroSolicitud = dato.numeroSolicitud;
             const query = { numeroSolicitud };
 
@@ -418,50 +431,232 @@ const afterNewHookUpload = async (response, context) => {
             if(dato.claseInternacional){              
               const existeClaseInternacional = await ClaseInternacional.findOne({ ClassInt: dato.claseInternacional }).exec()
               if(existeClaseInternacional){
-                //console.log(existeClaseInternacional._id);
                 dato.claseInternacionalId = existeClaseInternacional._id;
               }
             }
 
-            // Validacion de denominacion completa y titular
-            const conSimilitudExacta = await Marca.findOne({ denominacionCompleta: dato.denominacionCompleta }).exec()
-            let esTitularLexValor = null;
-            if(conSimilitudExacta){
-              console.log(`----------------------------------------------------------------------------- conSimilitudExacta-----${[i]}`);
-                  console.log(conSimilitudExacta);
+            /////////////////////////////////////////////////////////////////////////
+            // Existen terminos que no deben ser comparados en la Similitud Exacta o Media.
+            /////////////////////////////////////////////////////////////////////////
+            //const denominacionCompleta = "LOGOTIPO arc ELIASs PERRO SAPO";
+            const terminos_no_comparativos = new Array("GRÁFICA", "DISEÑO", "MIXTA",  
+            "FIGURATIVA", "DENOMINATIVA", "NOMINATIVA", "ISOTIPO",
+            "MÁS LOGOTIPO", "& LOGOTIPO", "LOGOTIPO", "LOGO",
+            "& DESIGN","DESIGN",
+            "& DEVICE","DEVICE",  );
+            
+            let denominacionCompletaT = JSON.parse( JSON.stringify( dato.denominacionCompleta ) );
+            let denominacionSinTermino = JSON.parse( JSON.stringify( dato.denominacionCompleta ) );
+            
+            console.log('--------------------------------------- : denominacionCompleta+ denominacionSinTermino');
+             if(denominacionCompletaT) console.log(denominacionCompletaT); 
+             if(denominacionSinTermino) console.log(denominacionSinTermino); 
+            console.log('--------------------------------------- ');
+
+            for(let i = 0; i < terminos_no_comparativos.length; i++) {
+                   let str = terminos_no_comparativos[i];
+              if(denominacionCompletaT.includes(str)){
+                denominacionSinTermino = denominacionCompletaT.substring(0,denominacionCompletaT.indexOf(str))
+                    + denominacionCompletaT.substring(denominacionCompletaT.substring(0,denominacionCompletaT.indexOf(str)).length +str.length);
+                    break;
+              }   
+            }
+            console.log('--------------------------------------- : DESPUES DEL FOR denominacionCompleta+ denominacionSinTermino');
+             if(denominacionCompletaT) console.log(denominacionCompletaT); 
+             if(denominacionSinTermino) console.log(denominacionSinTermino); 
+            console.log('--------------------------------------- ');
+            //denominacionSinTermino// contiene la denominacionCompleta sin el termino que no debe compararse
+
+            
+            
+            
+            const existeNumeroSolicitud = await Marca.findOne({ numeroSolicitud : dato.numeroSolicitud }).exec()
+            /////////////////////////////////////////////////////////////////////////
+            // Validacion de denominacion completa y titular con Similitud Exacta
+            /////////////////////////////////////////////////////////////////////////
+            //const conSimilitudExacta = await Marca.findOne({ denominacionCompleta: dato.denominacionCompleta } ).exec()
+            let conSimilitudMedia =new Array();
+            let conSimilitudExacta =new Array();
+            console.log('--------------------------------------- : INICIO existeNumeroSolicitud');
+            console.log(existeNumeroSolicitud);
+            console.log('--------------------------------------- : FIN existeNumeroSolicitud');
+
+            if(existeNumeroSolicitud == null){
+              conSimilitudExacta= await Marca.aggregate([
+                {
+                  $match: 
+                  {
+                    //denominacionCompleta: { $regex: denominacion6Primeros0 }
+                    denominacionCompleta: dato.denominacionCompleta
+                  }
+                }, 
+                { 
+                  $lookup:{
+                    from:"customers",
+                    localField: "titular",
+                    foreignField:"Name",
+                    as: "customers"
+                    //let:{denominacionCompleta : dato.denominacionCompleta},
+                    //pipeline : [
+                    //  {$match: {$expr: {$eq: ['$Name', '$Name']}}}
+                    //]
+                  }                
+                },{
+                    $project:{
+                    _id:1,
+                    customers : 1
+                  }
+                },
+                {"$unwind":"$customers"},
+                {"$match":{"customers":{"$ne":[]}}}
+              ]).exec()
+            
+            console.log('--------------------------------------- : RESULTADO DEL QUERY conSimilitudExacta');
+            if(conSimilitudExacta.length)console.log(conSimilitudExacta); 
+           console.log('--------------------------------------- FIN RESULTADO DEL QUERY conSimilitudExacta');
+
+
+            /////////////////////////////////////////////////////////////////////////
+            // validacion de denominacion completa  de  6 caracteres y titular /^cadena/
+            /////////////////////////////////////////////////////////////////////////
+            //denominacionSinTermino.substring(0,6);
+            let denominacion6Primeros0 = JSON.parse( JSON.stringify(denominacionSinTermino.substring(0,6)) );
+
+            //let denominacion6Primeros = JSON.parse( JSON.stringify( "/^"+denominacion6Primeros0+"/") );
+
+            //console.log('--------------------------------------- : RESULTADO DEL QUERY denominacion6Primeros');
+            //console.log(denominacion6Primeros); 
+           //console.log('--------------------------------------- FIN RESULTADO DEL QUERY denominacion6Primeros');
+
+           //1
+           //Obtiene todas las coincidencias que contienen la palabra
+           // const conSimilitudMedia = await Marca.findOne({ denominacionCompleta: { $regex: denominacion6Primeros0 }}).exec()
+           
+           //2
+           if(!conSimilitudExacta.length){
+            conSimilitudMedia = await Marca.aggregate([
+              {
+                $match: 
+                {
+                  denominacionCompleta: { $regex: `^${denominacion6Primeros0}`}//{ $regex: /^BARCELONA/ }
+                }
+              }, 
+              { 
+                 $lookup:{
+                  from:"customers",
+                  localField: "titular",
+                  foreignField:"Name",
+                  as: "customers"
+                 }                
+               },{
+                  $project:{
+                   _id:1,
+                   customers : 1
+                 }
+               },
+               {$unwind:"$customers"},
+               {$match:{"customers":{$ne:[]}}}
+             ]).exec()
+            }
+           // const conSimilitudMedia = await Marca.findOne({ denominacionCompleta: { $regex: denominacion6Primeros }}).exec()
+            console.log('--------------------------------------- : RESULTADO DEL QUERY conSimilitudMedia');
+            if(conSimilitudMedia.length)console.log(conSimilitudMedia); 
+            console.log('--------------------------------------- FIN RESULTADO DEL QUERY conSimilitudMedia');
+          }
+
+          if(forma3){
+            if( conSimilitudExacta || conSimilitudMedia){
+              
               //verificar si el titular es de LexValor
               esTitularLexValor = await Customer.findOne({ Name: conSimilitudExacta.titular }).exec()
-              console.log('--------------------------------------- : esTitularLexValor 1');
-              if(esTitularLexValor) console.log(esTitularLexValor); 
-              console.log('--------------------------------------- ');
-              if(forma1){
+              // console.log('--------------------------------------- : esTitularLexValor 1');
+              // if(esTitularLexValor) console.log(esTitularLexValor); 
+              // console.log('--------------------------------------- ');
+              // if(forma1){
 
-                let esMarcaParaPublicar = await Marca.findOne(query).exec()
-                console.log('--------------------------------------- esMarcaParaPublicar 5');
-                console.log(esMarcaParaPublicar);
-                if(esMarcaParaPublicar == null){
+              //   let esMarcaParaPublicar = await Marca.findOne(query).exec()
+              //   console.log('--------------------------------------- esMarcaParaPublicar 5');
+              //   console.log(esMarcaParaPublicar);
+              //   if(esMarcaParaPublicar == null){
 
-                      totalRegistrosConSimilitudExacta++;
+              //         totalRegistrosConSimilitudExacta++;
 
-                      console.log('--------------------------------------- totalRegistrosConSimilitudExacta 5');
-                      console.log(totalRegistrosConSimilitudExacta);
-                      console.log('--------------------------------------- arrConSimilitudExacta 5');
-                      arrConSimilitudExacta.push(conSimilitudExacta);
-                }
+              //         console.log('--------------------------------------- totalRegistrosConSimilitudExacta 5');
+              //         console.log(totalRegistrosConSimilitudExacta);
+              //         console.log('--------------------------------------- arrConSimilitudExacta 5');
+              //         arrConSimilitudExacta.push(conSimilitudExacta);
+              //   }
                 
-              }
-
-
-              
+              // }              
             }
-            let nuevaMarca = null;
-            // validacion de denominacion completa  de  6 caracteres y titular
+          }
+          if(record.id()) 
+                dato.gacetaId = record.id().toString();
+                
+                // Crea la Marca para obtener el ID que se insertará
+                let documents = Object.keys({dato} ).map( key => {
+                  return new Marca(   {dato}   );
+                });
 
-            // si no hay similitudes enotnces es sin similitud
+                dato._id = documents[0]._id;
+                console.log('--------------------------------------- Inicio nuevaMarca final : dato._id ');
+                console.log(dato._id )  // Success
+                console.log('--------------------------------------- Fin nuevaMarca final : dato._id ');
+
+                console.log('--------------------------------------------------------------------------------- INICIO forma 300');
+           // Validacion de denominacion completa y titular
+           if(conSimilitudExacta.length){
+             //verificar si el titular es de LexValor
+             //if(esTitularLexValor){
+            
+                totalRegistrosConSimilitudExacta++;
+                arrConSimilitudExacta.push(dato);
+               console.log('---------------------XXX arrConSimilitudExacta' );
+               console.log(arrConSimilitudExacta );
+               // // GUARDAR LA INFO CON CADA COINCIDENCIA
+                //record.update({ conSimilitudExacta: arrConSimilitudExacta});
+            // }
+          }else if(conSimilitudMedia.length){
+            totalRegistrosConSimilitudMedia++;
+              arrConSimilitudMedia.push(dato);
+            console.log('---------------------XXX conSimilitudMedia' );
+            console.log(arrConSimilitudMedia );
+             // GUARDAR LA INFO CON CADA COINCIDENCIA
+             //record.update({ conSimilitudMedia: arrConSimilitudMedia});
+           }else{
+             totalRegistrosSinSimilitud++;
+             console.log('---------------------XXX totalRegistrosSinSimilitud' );
+           }
             
             // encuentra marcas con el mismo numero de solicitud, si la encuentra la pone en estado PUBLICADA
             // Si no encuentra entones la Guarda como Marca Nueva.
-            Marca.findOneAndUpdate(query, {$set:{tipoEstados:"Publicada"}}, {new: true}, (err, result) => {
+            Marca.findOneAndUpdate({numeroSolicitud : dato.numeroSolicitud }, {$set:{tipoEstados:"Publicada"}}, {new: true}, (err, result) => {
+              console.log('--------------------------------------------------------------------------------- INICIO forma 300');
+          // Validacion de denominacion completa y titular
+          // if(conSimilitudExacta.length){
+          //   //verificar si el titular es de LexValor
+          //   //if(esTitularLexValor){
+              
+          //      totalRegistrosConSimilitudExacta++;
+          //      arrConSimilitudExacta.push(dato);
+
+          //      console.log('---------------------XXX arrConSimilitudExacta' );
+          //     // // GUARDAR LA INFO CON CADA COINCIDENCIA
+          //     // record.update({ conSimilitudExacta: arrConSimilitudExacta});
+          //  // }
+
+          // }else if(conSimilitudMedia.length){
+
+          //   totalRegistrosConSimilitudMedia++;
+          //   arrConSimilitudMedia.push(dato);
+
+          //   console.log('---------------------XXX conSimilitudMedia' );
+          //   // GUARDAR LA INFO CON CADA COINCIDENCIA
+          //   //record.update({ conSimilitudMedia: arrConSimilitudMedia});
+          // }else{
+          //   totalRegistrosSinSimilitud++;
+          //   console.log('---------------------XXX totalRegistrosSinSimilitud' );
+          // }
               if (err) {
                   console.log("Something wrong when updating data!");
                   Gaceta.deleteOne({
@@ -476,95 +671,116 @@ const afterNewHookUpload = async (response, context) => {
               }              
               if( result == null ){
 
-                if(record.id()) 
-                dato.gacetaId = record.id().toString();
+                // if(record.id()) 
+                // dato.gacetaId = record.id().toString();
 
+                // // if(forma2){
+                // //   console.log(`----------------------------------------------------------------------------- conSimilitudExacta-----2`);
+                // //   console.log(conSimilitudExacta);
+                // //   console.log('--------------------------------------- : esTitularLexValor 2');
+                // //   if(esTitularLexValor) console.log(esTitularLexValor); 
 
-                if(forma2){
-                  console.log(`----------------------------------------------------------------------------- conSimilitudExacta-----2`);
-                  console.log(conSimilitudExacta);
-                  console.log('--------------------------------------- : esTitularLexValor 2');
-                  if(esTitularLexValor) console.log(esTitularLexValor); 
+                // //   // Validacion de denominacion completa y titular
+                // //   if(conSimilitudExacta){
+                // //     console.log(`----------------------------------------------------------------------------- conSimilitudExacta-----3`);
+                // //     console.log(conSimilitudExacta);
+                // //     //verificar si el titular es de LexValor
+                // //     if(esTitularLexValor){
+                // //       console.log('--------------------------------------- : esTitularLexValor 3');
+                // //       console.log(esTitularLexValor);
 
-                  // Validacion de denominacion completa y titular
-                  if(conSimilitudExacta){
-                    console.log(`----------------------------------------------------------------------------- conSimilitudExacta-----3`);
-                    console.log(conSimilitudExacta);
-                    //verificar si el titular es de LexValor
-                    if(esTitularLexValor){
-                      console.log('--------------------------------------- : esTitularLexValor 3');
-                      console.log(esTitularLexValor);
+                // //       totalRegistrosConSimilitudExacta++;
 
-                      totalRegistrosConSimilitudExacta++;
+                // //       console.log('--------------------------------------- totalRegistrosConSimilitudExacta 4');
+                // //       console.log(totalRegistrosConSimilitudExacta);
+                // //       console.log('--------------------------------------- arrConSimilitudExacta 4');
+                // //       arrConSimilitudExacta.push(conSimilitudExacta);
+                // //       console.log(arrConSimilitudExacta);
+                // //       console.log('---------------------------------------------------------------------------------');
 
-                      console.log('--------------------------------------- totalRegistrosConSimilitudExacta 4');
-                      console.log(totalRegistrosConSimilitudExacta);
-                      console.log('--------------------------------------- arrConSimilitudExacta 4');
-                      arrConSimilitudExacta.push(conSimilitudExacta);
-                      console.log(arrConSimilitudExacta);
-                      console.log('---------------------------------------------------------------------------------');
-
-                          //aqui actualizar
-                      console.log('--------------------------------------- arrConSimilitudExacta final');
-                      console.log(arrConSimilitudExacta);
+                // //           //aqui actualizar
+                // //       console.log('--------------------------------------- arrConSimilitudExacta final');
+                // //       console.log(arrConSimilitudExacta);
                     
-                      record.update({ conSimilitudExacta: arrConSimilitudExacta});
+                // //       record.update({ conSimilitudExacta: arrConSimilitudExacta});
 
-                      console.log('---------------------------------------------------------------------------------');
+                // //       console.log('---------------------------------------------------------------------------------');
 
 
-                    }
-                  }
-                }
+                // //     }
+                // //   }
+                // // }
 
-                // validacion de denominacion completa  de  6 caracteres y titular
-
-                // si no hay similitudes enotnces es sin similitud
-                // let documents = Object.keys(dato).map( key => {
-                //   return new Marca(   dato    );
+                
+                // // Crea la Marca para obtener el ID que se insertará
+                // let documents = Object.keys({dato} ).map( key => {
+                //   return new Marca(   {dato}   );
                 // });
 
-                let documents = Object.keys({dato} ).map( key => {
-                     return new Marca(   {dato}   );
-                   });
+                // dato._id = documents[0]._id;
+                // console.log('--------------------------------------- Inicio nuevaMarca final : dato._id ');
+                // console.log(dato._id )  // Success
+                // console.log('--------------------------------------- Fin nuevaMarca final : dato._id ');
 
-                   dato._id = documents[0]._id;
-                   console.log('--------------------------------------- Inicio nuevaMarca final : dato._id ');
-                   console.log(dato._id )  // Success
-                   console.log('--------------------------------------- Fin nuevaMarca final : dato._id ');
+                // De existir similitud Exacta y esCliente de LEX valor, 
+                // entonces actualiza el arr de Similitud exacta
+               // if(forma3){
+                // console.log('--------------------------------------------------------------------------------- INICIO forma 3');
+                //   // Validacion de denominacion completa y titular
+                //   if(conSimilitudExacta.length){
+                //     //verificar si el titular es de LexValor
+                //     //if(esTitularLexValor){
+                      
+                //        totalRegistrosConSimilitudExacta++;
+                //        arrConSimilitudExacta.push(dato);
 
-                   if(forma3){
-                    console.log('--------------------------------------------------------------------------------- INICIO forma 3');
-                    // Validacion de denominacion completa y titular
-                    if(conSimilitudExacta){
+                //        console.log('---------------------XXX arrConSimilitudExacta' );
+                //       // // GUARDAR LA INFO CON CADA COINCIDENCIA
+                //       // record.update({ conSimilitudExacta: arrConSimilitudExacta});
+                //    // }
 
-                      //verificar si el titular es de LexValor
-                      if(esTitularLexValor){
+                //   }else if(conSimilitudMedia.length){
 
-  
-                        totalRegistrosConSimilitudExacta++;
+                //     totalRegistrosConSimilitudMedia++;
+                //     arrConSimilitudMedia.push(dato);
 
-                        arrConSimilitudExacta.push(dato);
+                //     console.log('---------------------XXX conSimilitudMedia' );
+                //     // GUARDAR LA INFO CON CADA COINCIDENCIA
+                //     //record.update({ conSimilitudMedia: arrConSimilitudMedia});
+                //   }else{
+                //     totalRegistrosSinSimilitud++;
+                //     console.log('---------------------XXX totalRegistrosSinSimilitud' );
+                //   }
 
-
-                        // GUARDAR LA INFO CON CADA COINCIDENCIA
-                          record.update({ conSimilitudExacta: arrConSimilitudExacta});
-
-                        }
-                      }
-                    }
-
-                Marca.insertMany(dato).then(function(){
+                 Marca.insertMany(dato).then(function(){
                     console.log("Data inserted")  // Success
-                    //return nuevaMarca;
-                    //console.log(nuevaMarca)  
-                    //return (nuevaMarca);
-                    // si la nueva marca coincide, entonces es parte de la similitud
-
+                    
+          //  console.log('--------------------------------------------------------------------------------- INICIO forma 300');
+          //  // Validacion de denominacion completa y titular
+          //  if(conSimilitudExacta.length){
+          //    //verificar si el titular es de LexValor
+          //    //if(esTitularLexValor){
+            
+          //       totalRegistrosConSimilitudExacta++;
+          //       arrConSimilitudExacta.push(dato);
+          //      console.log('---------------------XXX arrConSimilitudExacta' );
+          //      console.log(arrConSimilitudExacta );
+          //      // // GUARDAR LA INFO CON CADA COINCIDENCIA
+          //       //record.update({ conSimilitudExacta: arrConSimilitudExacta});
+          //   // }
+          // }else if(conSimilitudMedia.length){
+          //   totalRegistrosConSimilitudMedia++;
+          //     arrConSimilitudMedia.push(dato);
+          //   console.log('---------------------XXX conSimilitudMedia' );
+          //   console.log(arrConSimilitudMedia );
+          //    // GUARDAR LA INFO CON CADA COINCIDENCIA
+          //    //record.update({ conSimilitudMedia: arrConSimilitudMedia});
+          //  }else{
+          //    totalRegistrosSinSimilitud++;
+          //    console.log('---------------------XXX totalRegistrosSinSimilitud' );
+          //  }
                   }).catch(function(error){
                       console.log(error)      // Failure
-                      //Gaceta.deleteOne({ NumberId: record.params.NumberId }).exec();
-
                       Gaceta.deleteOne({
                         _id: record.id()
                       })
@@ -576,30 +792,60 @@ const afterNewHookUpload = async (response, context) => {
                       })
                   });
                   
-                  console.log('--------------------------------------- Inicio nuevaMarca final : documents');
-                  console.log(documents)  // Success
-                  console.log('--------------------------------------- Fin nuevaMarca final : documents');
-                  
               }
-              
                   //ARC
                   //console.log(result);
-
             });
-            
           }
         
-        // //aqui actualizar
-         console.log('--------------------------------------- arrConSimilitudExacta final');
-        //             console.log(arrConSimilitudExacta);
+        // // //aqui actualizar
+        //  console.log('--------------------------------------- arrConSimilitudExacta final');
+        // //             console.log(arrConSimilitudExacta);
                    
-         record.update({ conSimilitudExacta: arrConSimilitudExacta});
+        //  record.update({ conSimilitudExacta: arrConSimilitudExacta});
+        //  record.update({ conSimilitudMedia: arrConSimilitudMedia});
 
-         console.log('---------------------------------------------------------------------------------');
+        //  console.log('--------------------------------------------------------------------------------- totales finales');
+        //  console.log(`totalRegistrosImportados : ${totalRegistrosImportados}`);
+        //  console.log(`totalRegistrosConSimilitudExacta : ${totalRegistrosConSimilitudExacta}`);
+        //  console.log(`totalRegistrosConSimilitudMedia : ${totalRegistrosConSimilitudMedia}`);
+        //  console.log(`totalRegistrosSinSimilitud : ${totalRegistrosSinSimilitud}`);
+        //  console.log('--------------------------------------------------------------------------------- totales finales');
 
 
-        }
+        }// fin if esDocumentoPermitido
+
+        // // //aqui actualizar
+        // console.log('--------------------------------------- arrConSimilitudExacta final');
+        // //             console.log(arrConSimilitudExacta);
+                   
+        //  await record.update({ conSimilitudExacta: arrConSimilitudExacta});
+        //  await record.update({ conSimilitudMedia: arrConSimilitudMedia});
+
+        //  console.log('--------------------------------------------------------------------------------- totales finales');
+        //  console.log(`totalRegistrosImportados : ${totalRegistrosImportados}`);
+        //  console.log(`totalRegistrosConSimilitudExacta : ${totalRegistrosConSimilitudExacta}`);
+        //  console.log(`totalRegistrosConSimilitudMedia : ${totalRegistrosConSimilitudMedia}`);
+        //  console.log(`totalRegistrosSinSimilitud : ${totalRegistrosSinSimilitud}`);
+        //  console.log('--------------------------------------------------------------------------------- totales finales');
+
       }  
+              // //aqui actualizar
+              console.log('--------------------------------------- arrConSimilitudExacta final');
+              //             console.log(arrConSimilitudExacta);
+                         
+               await record.update({ conSimilitudExacta: arrConSimilitudExacta});
+               await record.update({ conSimilitudMedia: arrConSimilitudMedia});
+               await record.update({ totalRegistrosImportados: totalRegistrosImportados});
+               await record.update({ sinSimilitud: totalRegistrosSinSimilitud});
+      
+               console.log('--------------------------------------------------------------------------------- totales finales');
+               console.log(`totalRegistrosImportados : ${totalRegistrosImportados}`);
+               console.log(`totalRegistrosConSimilitudExacta : ${totalRegistrosConSimilitudExacta}`);
+               console.log(`totalRegistrosConSimilitudMedia : ${totalRegistrosConSimilitudMedia}`);
+               console.log(`totalRegistrosSinSimilitud : ${totalRegistrosSinSimilitud}`);
+               console.log('--------------------------------------------------------------------------------- totales finales');
+      
     }
     return response;
   };

@@ -121,9 +121,9 @@ const options = {
               }
             }
 
-             console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx fin request");
-             console.log(request );
-             console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx inicio request");
+             //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx fin request");
+             //console.log(request );
+             //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx inicio request");
 
             if (request.payload.profileExcelLocation == null){
                 throw new AdminBro.ValidationError({
@@ -135,9 +135,9 @@ const options = {
                 })
             }else{
               const pathExcel = request.payload.profileExcelLocation.name ;      
-              console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx inicio context.profileExcelLocation.path ");
-              console.log(pathExcel);
-              console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx fin context.profileExcelLocation.path");
+              //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx inicio context.profileExcelLocation.path ");
+              //console.log(pathExcel);
+              //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx fin context.profileExcelLocation.path");
               // validar si el documento corresponde a un excel.
               let esDocumentoPermitido = false;
               if(pathExcel){
@@ -147,7 +147,7 @@ const options = {
                 const extension = (pathExcel.substring(pathExcel.lastIndexOf("."))).toLowerCase();
                 for (let i = 0; i < extensiones_permitidas.length; i++) {
                   
-                  console.log(extension);
+                  //console.log(extension);
                   if (extensiones_permitidas[i] == extension) {
                     esDocumentoPermitido = true;
                     break;

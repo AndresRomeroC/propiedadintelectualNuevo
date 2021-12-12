@@ -28,6 +28,9 @@ const GacetaSchema = new mongoose.Schema({
     totalRegistrosImportados: {
       type: Number,
     },
+    sinSimilitud: {
+      type: Number,
+    },
     conSimilitudExacta: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -40,9 +43,7 @@ const GacetaSchema = new mongoose.Schema({
         ref: 'Marca',
       },
     ],
-    sinSimilitud: {
-      type: Number,
-    },
+    
 
 
   });
