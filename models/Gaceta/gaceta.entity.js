@@ -28,9 +28,12 @@ const GacetaSchema = new mongoose.Schema({
     totalRegistrosImportados: {
       type: Number,
     },
-    sinSimilitud: {
-      type: Number,
-    },
+    sinSimilitud:[
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Marca',
+      },
+    ],
     conSimilitudExacta: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -43,9 +46,6 @@ const GacetaSchema = new mongoose.Schema({
         ref: 'Marca',
       },
     ],
-    
-
-
   });
   
 //module.exports = mongoose.model('Gaceta',GacetaSchema);

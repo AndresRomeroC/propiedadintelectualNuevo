@@ -9,9 +9,7 @@ import Component4 from '../components/Marca/DocumentoAdjunto.list'
 AdminBro.UserComponents.Component4 = Component4
 import Component5 from '../components/Marca/DocumentoAdjunto.list'
 AdminBro.UserComponents.Component5 = Component5
-import Component6 from '../components/Gaceta/SimilitudExacta'
+import Component6 from '../components/Gaceta/ProfileExcelLocation.edit'
 AdminBro.UserComponents.Component6 = Component6
 import Component7 from '../components/Gaceta/ProfileExcelLocation.edit'
 AdminBro.UserComponents.Component7 = Component7
-import Component8 from '../components/Gaceta/ProfileExcelLocation.edit'
-AdminBro.UserComponents.Component8 = Component8

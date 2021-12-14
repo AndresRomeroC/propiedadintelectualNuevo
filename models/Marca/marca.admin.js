@@ -41,6 +41,12 @@ const PropiedadIntelectualNav = {
           list: false, edit: false, filter: false, show: false,
         },
       },
+      marcaConSimilitudExacta: {
+        isDisabled: true,
+      },
+      marcaConSimilitudMedia: {
+        isDisabled: true,
+      },
       documentoAdjunto: {
         components: {
           new: AdminBro.bundle('../../components/Marca/DocumentoAdjunto.edit.jsx'),

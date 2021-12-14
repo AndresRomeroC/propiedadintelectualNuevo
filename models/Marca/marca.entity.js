@@ -68,7 +68,7 @@ const MarcaSchema = new mongoose.Schema({
     numeroTitulo: {
       type: Number
     },
-    tipoEstados: {
+    tipoEstado: {
       type: String,
       enum: [
       'En trámite',
@@ -120,6 +120,23 @@ const MarcaSchema = new mongoose.Schema({
     fechaCreacion: {
       type: Date, default: Date.now()
     },
+    marcaConSimilitudExacta: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Marca',
+      },
+    ],
+    // marcaConSimilitudMedia: {
+    //   type: mongoose.SchemaTypes.ObjectId,      
+    //   ref: 'Marca',
+    // },
+    marcaConSimilitudMedia: 
+    [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Marca',
+      },
+    ],
     // content: {
     //   type: String,
     // }, 

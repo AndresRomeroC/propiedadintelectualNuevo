@@ -18,7 +18,8 @@ const { ObjectId } = require('mongoose/lib/schema/index');
 
 const afterHookUpload = async (response, context) => {
   
-
+  var formaN=true;
+  if(formaN){
 //
   //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO response ===== > ");
   //console.log(response);
@@ -146,7 +147,7 @@ const afterHookUpload = async (response, context) => {
         //    });
         //  }else{
 
-            Marca.findOneAndUpdate(query, {$set:{tipoEstados:"Caducidad del trámite de renovación"}}, {new: true}, (err, result) => {
+            Marca.findOneAndUpdate(query, {$set:{tipoEstado:"Caducidad del trámite de renovación"}}, {new: true}, (err, result) => {
               if (err) {
                   console.log("Something wrong when updating data!");
               }
@@ -227,10 +228,13 @@ const afterHookUpload = async (response, context) => {
     */
   }
   return response;
+  }
 };
 
 const afterNewHookUpload = async (response, context) => {
   
+  var formaN = true;
+  if(formaN){
     // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx INICIO response ===== > ");
     // console.log(response);
     // console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx FINresponse ===== > ");
@@ -368,6 +372,8 @@ const afterNewHookUpload = async (response, context) => {
 
       let totalRegistrosConSimilitudMedia = 0;
       let arrConSimilitudMedia = new Array();
+
+      let arrConSinSimilitud = new Array();
       let totalRegistrosSinSimilitud = 0;
 
       //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx pathExcel comienza, el cual debe tener el nombre del archivo ");
@@ -441,7 +447,7 @@ const afterNewHookUpload = async (response, context) => {
             //const denominacionCompleta = "LOGOTIPO arc ELIASs PERRO SAPO";
             const terminos_no_comparativos = new Array("GRÁFICA", "DISEÑO", "MIXTA",  
             "FIGURATIVA", "DENOMINATIVA", "NOMINATIVA", "ISOTIPO",
-            "MÁS LOGOTIPO", "& LOGOTIPO", "LOGOTIPO", "LOGO",
+            " MÁS LOGOTIPO","MÁS LOGOTIPO ",  "MÁS LOGOTIPO", "& LOGOTIPO", "LOGOTIPO", "LOGO",
             "& DESIGN","DESIGN",
             "& DEVICE","DEVICE",  );
             
@@ -471,6 +477,12 @@ const afterNewHookUpload = async (response, context) => {
             
             
             const existeNumeroSolicitud = await Marca.findOne({ numeroSolicitud : dato.numeroSolicitud }).exec()
+
+            console.log('--------------------------------------- : existeNumeroSolicitud');
+            console.log(existeNumeroSolicitud);
+            console.log('--------------------------------------- : fin existeNumeroSolicitud');
+
+
             /////////////////////////////////////////////////////////////////////////
             // Validacion de denominacion completa y titular con Similitud Exacta
             /////////////////////////////////////////////////////////////////////////
@@ -487,7 +499,8 @@ const afterNewHookUpload = async (response, context) => {
                   $match: 
                   {
                     //denominacionCompleta: { $regex: denominacion6Primeros0 }
-                    denominacionCompleta: dato.denominacionCompleta
+                    //denominacionCompleta: dato.denominacionCompleta
+                    denominacionCompleta: { $regex: `^${denominacionSinTermino}$`}//{ $regex: /^BARCELONA/ }
                   }
                 }, 
                 { 
@@ -495,7 +508,11 @@ const afterNewHookUpload = async (response, context) => {
                     from:"customers",
                     localField: "titular",
                     foreignField:"Name",
-                    as: "customers"
+                    as: "customers",
+                    pipeline: [ 
+
+                        { $match: { Name: { $exists: true } } },
+                      ],
                     //let:{denominacionCompleta : dato.denominacionCompleta},
                     //pipeline : [
                     //  {$match: {$expr: {$eq: ['$Name', '$Name']}}}
@@ -543,19 +560,52 @@ const afterNewHookUpload = async (response, context) => {
               }, 
               { 
                  $lookup:{
-                  from:"customers",
+                  // from:"customers",
+                  // localField: "titular",
+                  // foreignField:"Name",
+                  // as: "x",
+                  from: "customers",
                   localField: "titular",
-                  foreignField:"Name",
+                  foreignField: "Name",
+                  //let: { titular: "$titular" },
+                  pipeline: [ 
+                  //   {                      
+                  //      $match: 
+                  //       { $expr:
+                  //         //{ $and:
+                  //           [
+                  //             { $eq: [ "$Name", "$$titular" ] }
+                  //           ]
+                  //         //}
+                  //       } 
+                      
+                  //       // "customers": { 
+                  //       //   $exists: true,
+                  //       //   $ne: [],
+                  //       // },                        
+                                                                
+                  //   },
+                    { $match: { Name: { $exists: true } } },
+                  ],
                   as: "customers"
+
                  }                
-               },{
+               },
+               {
                   $project:{
                    _id:1,
+                   //titular:1,
                    customers : 1
                  }
                },
-               {$unwind:"$customers"},
-               {$match:{"customers":{$ne:[]}}}
+              //  {
+              //   $unwind: {
+              //     path: "$x",
+              //     "preserveNullAndEmptyArrays": true
+              //   }
+              // },
+              {$unwind:"$customers"},
+              {$match:{"customers":{$ne:[]}}}
              ]).exec()
             }
            // const conSimilitudMedia = await Marca.findOne({ denominacionCompleta: { $regex: denominacion6Primeros }}).exec()
@@ -590,6 +640,9 @@ const afterNewHookUpload = async (response, context) => {
               // }              
             }
           }
+          console.log('--------------------------------------- : eL NUEVO NUMERO DE ID DE GACETA ES : ');
+          console.log(record.id());
+          console.log('--------------------------------------- : FIN NUEVO NUMERO DE ID DE GACETA');
           if(record.id()) 
                 dato.gacetaId = record.id().toString();
                 
@@ -608,7 +661,17 @@ const afterNewHookUpload = async (response, context) => {
            if(conSimilitudExacta.length){
              //verificar si el titular es de LexValor
              //if(esTitularLexValor){
+            //AGREGAR CON QUIEN ES LA SIMILITUD
+            dato.marcaConSimilitudExacta = new Array();
+            for(let j = 0; j  < conSimilitudExacta.length; j++) {
+              let marcaId1 = conSimilitudExacta[j]._id;
+
+              console.log('---------------------XXX marcaId1' );
+              console.log(marcaId1);
+              console.log('---------------------XXX marcaId1' );
+              dato.marcaConSimilitudExacta.push(marcaId1);
             
+            }
                 totalRegistrosConSimilitudExacta++;
                 arrConSimilitudExacta.push(dato);
                console.log('---------------------XXX arrConSimilitudExacta' );
@@ -618,19 +681,41 @@ const afterNewHookUpload = async (response, context) => {
             // }
           }else if(conSimilitudMedia.length){
             totalRegistrosConSimilitudMedia++;
-              arrConSimilitudMedia.push(dato);
+            
+            //AGREGAR CON QUIEN ES LA SIMILITUD
+            dato.marcaConSimilitudMedia = new Array();
+            for(let k = 0; k < conSimilitudMedia.length; k++) {
+              let marcaId2 = conSimilitudMedia[k]._id;
+
+              console.log('---------------------XXX marcaId2' );
+              console.log(marcaId2);
+              console.log('---------------------XXX marcaId2' );
+              dato.marcaConSimilitudMedia.push(marcaId2);
+            
+            }
+            // AGREGAR SIMILITUDES                                 
+            arrConSimilitudMedia.push(dato);
             console.log('---------------------XXX conSimilitudMedia' );
             console.log(arrConSimilitudMedia );
              // GUARDAR LA INFO CON CADA COINCIDENCIA
              //record.update({ conSimilitudMedia: arrConSimilitudMedia});
            }else{
-             totalRegistrosSinSimilitud++;
-             console.log('---------------------XXX totalRegistrosSinSimilitud' );
+            totalRegistrosSinSimilitud++;
+            if(existeNumeroSolicitud) dato._id = existeNumeroSolicitud._id;
+
+
+
+           
+            arrConSinSimilitud.push(dato);
+            console.log('---------------------XXX totalRegistrosSinSimilitud' );
+            console.log(arrConSinSimilitud);
+           
            }
             
+           //if(forma3){ // PARA PRUEBAS SIN GUARDAR NADA
             // encuentra marcas con el mismo numero de solicitud, si la encuentra la pone en estado PUBLICADA
             // Si no encuentra entones la Guarda como Marca Nueva.
-            Marca.findOneAndUpdate({numeroSolicitud : dato.numeroSolicitud }, {$set:{tipoEstados:"Publicada"}}, {new: true}, (err, result) => {
+            Marca.findOneAndUpdate({numeroSolicitud : dato.numeroSolicitud }, {$set:{tipoEstado:"Publicada", gacetaId: dato.gacetaId}}, {new: true}, (err, result) => {
               console.log('--------------------------------------------------------------------------------- INICIO forma 300');
           // Validacion de denominacion completa y titular
           // if(conSimilitudExacta.length){
@@ -751,7 +836,8 @@ const afterNewHookUpload = async (response, context) => {
                 //     totalRegistrosSinSimilitud++;
                 //     console.log('---------------------XXX totalRegistrosSinSimilitud' );
                 //   }
-
+                
+                dato.tipoEstado= "Publicada";
                  Marca.insertMany(dato).then(function(){
                     console.log("Data inserted")  // Success
                     
@@ -796,9 +882,11 @@ const afterNewHookUpload = async (response, context) => {
                   //ARC
                   //console.log(result);
             });
-          }
-        
-        // // //aqui actualizar
+
+            //}forma3
+
+          }//fin if FOR RECORRE EXCEL
+          // // //aqui actualizar
         //  console.log('--------------------------------------- arrConSimilitudExacta final');
         // //             console.log(arrConSimilitudExacta);
                    
@@ -813,7 +901,7 @@ const afterNewHookUpload = async (response, context) => {
         //  console.log('--------------------------------------------------------------------------------- totales finales');
 
 
-        }// fin if esDocumentoPermitido
+        }// FIN IF  esDocumentoPermitido
 
         // // //aqui actualizar
         // console.log('--------------------------------------- arrConSimilitudExacta final');
@@ -829,7 +917,8 @@ const afterNewHookUpload = async (response, context) => {
         //  console.log(`totalRegistrosSinSimilitud : ${totalRegistrosSinSimilitud}`);
         //  console.log('--------------------------------------------------------------------------------- totales finales');
 
-      }  
+      } // FIN DE PATH EXCEL
+
               // //aqui actualizar
               console.log('--------------------------------------- arrConSimilitudExacta final');
               //             console.log(arrConSimilitudExacta);
@@ -837,7 +926,7 @@ const afterNewHookUpload = async (response, context) => {
                await record.update({ conSimilitudExacta: arrConSimilitudExacta});
                await record.update({ conSimilitudMedia: arrConSimilitudMedia});
                await record.update({ totalRegistrosImportados: totalRegistrosImportados});
-               await record.update({ sinSimilitud: totalRegistrosSinSimilitud});
+               await record.update({ sinSimilitud: arrConSinSimilitud});
       
                console.log('--------------------------------------------------------------------------------- totales finales');
                console.log(`totalRegistrosImportados : ${totalRegistrosImportados}`);
@@ -848,7 +937,60 @@ const afterNewHookUpload = async (response, context) => {
       
     }
     return response;
-  };
+ 
+ 
+ 
+ 
+ }
+ };
+
+  
+const afterDeleteHookUpload = async (response, context) => {
+
+  // console.log('==================== INICIO RESPONSE');
+  // console.log(response);
+  // console.log('==================== FIN RESPONSE');
+  
+  // console.log('==================== INICIO context');
+  // console.log(context);
+  // console.log('==================== INICIO context');
+
+  const formaN = true;
+
+
+  if(formaN){
+    
+    const { record, profileExcelLocation } = context;
+    
+    const gacetaIdN =  record.params._id;
+
+    console.log('==================== record.params.NumberId');
+    console.log(gacetaIdN);
+    console.log('==================== new ObjectId(gacetaIdN)');
+    //var o_id = new ObjectId(gacetaIdN);
+    //console.log(  o_id );
+  
+    const marcasBorradas = await Marca.deleteMany(
+      { gacetaId: gacetaIdN, 
+        //tipoEstado :  {$in: ["Publicada1"]}
+      }
+        ).exec()
+  
+        console.log('==================== INICIO marcasBorradas');
+        console.log(marcasBorradas);
+        console.log('==================== INICIO marcasBorradass');
+
+        var msgDelete = `Gaceta número ${record.params.NumberId} eliminada con éxito`
+
+        if(marcasBorradas)
+          msgDelete = `Gaceta número ${record.params.NumberId} y sus ${marcasBorradas.deletedCount} Marcas fueron eliminadas con éxito`
+
+        response.notice.message = msgDelete;
+        response.notice.type = 'success';
+    
+  }
+  return response;
+};
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////.
@@ -972,4 +1114,4 @@ const beforeHookUpload = async (request, context, modifiedRequest) => {
     return response;
   };
 
-module.exports = { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload};
+module.exports = { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload};

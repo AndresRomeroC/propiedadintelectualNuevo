@@ -26,7 +26,7 @@ const { ValidationError } = require ('admin-bro');
 
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
-const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload} = require('../../hooks/gaceta.hooks');
+const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload} = require('../../hooks/gaceta.hooks');
 const { default: adminBro } = require('admin-bro');
 
 
@@ -51,15 +51,24 @@ const options = {
       type: Number,
       isVisible: false,
     },
-
+    
+    totalRegistrosImportados: {
+      isDisabled: true,
+    },
+    sinSimilitud: {
+      isDisabled: true,
+    },
+    conSimilitudExacta: {
+      isDisabled: true,
+    },
+    conSimilitudMedia: {
+      isDisabled: true,
+    },
     UploadDate: {
       type: 'date',
       isVisible: {
         list: true, edit: false, filter: true, show: true,
       },
-    },
-    similitudExacta:{
-      component:  AdminBro.bundle('../../components/Gaceta/SimilitudExacta.jsx'),
     },
     profileExcelLocation: {
       components: {
@@ -77,14 +86,6 @@ const options = {
   actions: {
       edit: { 
         isAccessible: onlyAdmin,
-           
-
-       
-        // if (passport.session.user) {
-        //   req.session.adminUser = passport.session.user
-        //   }
-
-
 
         before: async (request, context) => {
           const modifiedRequest = await beforeHookPassword(request, context);
@@ -97,7 +98,19 @@ const options = {
         return afterHookUpload(response, context, modifiedResponse);
         },
       },
-      delete: { isAccessible: onlyAdmin },
+      delete: { 
+        isAccessible: onlyAdmin , 
+        before: async (request, context) => {
+          const modifiedRequest = await beforeHookPassword(request, context);
+
+          return beforeHookUpload(request, context, modifiedRequest);
+        },
+        after: async (response, request, context) => {
+        const modifiedResponse = await afterHookPassword(response, context);
+
+        return afterDeleteHookUpload(response, context, modifiedResponse);
+        },
+      },
       new: { 
         isAccessible: onlyAdmin ,
         before: async (request, context) => {
