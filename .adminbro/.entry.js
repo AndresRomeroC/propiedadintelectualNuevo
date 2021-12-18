@@ -13,3 +13,7 @@ import Component6 from '../components/Gaceta/ProfileExcelLocation.edit'
 AdminBro.UserComponents.Component6 = Component6
 import Component7 from '../components/Gaceta/ProfileExcelLocation.edit'
 AdminBro.UserComponents.Component7 = Component7
+import Component8 from '../components/some-stats'
+AdminBro.UserComponents.Component8 = Component8
+import Component9 from '../components/some-stats'
+AdminBro.UserComponents.Component9 = Component9

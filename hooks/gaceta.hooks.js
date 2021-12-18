@@ -954,10 +954,7 @@ const afterDeleteHookUpload = async (response, context) => {
   // console.log('==================== INICIO context');
   // console.log(context);
   // console.log('==================== INICIO context');
-
   const formaN = true;
-
-
   if(formaN){
     
     const { record, profileExcelLocation } = context;

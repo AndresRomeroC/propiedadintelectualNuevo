@@ -14,6 +14,8 @@ const Country   = require('../../models/Country/country.admin');
 const Customer  = require('../../models/Customer/customer.admin');
 const NizaClass = require('../../models/NizaClass/nizaClass.admin');
 const ClaseInternacional     = require('../../models/ClaseInternacional/claseInternacional.admin');
+const MarcaPorVencer     = require('../../models/MarcaPorVencer/marcaPorVencer.admin');
+//const CustomXVencer     = require('../../models/CustomXVencer/customXVencer');
 
 // const PropiedadIntelectualNav = {
 //   name: 'Propiedad Intelectual',
@@ -42,8 +44,25 @@ AdminBro.registerAdapter(mongooseAdminBro);
 const AdminBroOptions = {
   //currentAdmin,
   databases: [mongoose],
-  rootPath: '/admin',
-  //loginPath: '/admin/resource',
+  //rootPath: '/adminPropiedad',
+  //loginPath: '/adminPropiedad/login',
+  //logoutPath: '/adminPropiedad/logout',
+  pages: {
+    // customPage: {
+    //   label: "Home",
+    //   handler: async (request, response, context) => {
+    //     //const modifiedRequestCustom = await handlerHookCustom(request, context, response);
+    //     return {
+    //       text: 'I am fetched from the backend',
+    //     }
+    //   },
+    //   component: AdminBro.bundle('../../components/some-stats'),
+    // },
+    Home: {
+      label: "Home1",
+      component: AdminBro.bundle('../../components/some-stats'),
+     },
+  },
   resources: [
     Marca,
     Gaceta,
@@ -52,6 +71,7 @@ const AdminBroOptions = {
     Country,
     NizaClass,
     UserA,
+    MarcaPorVencer
   //  MisMarcas
   //  {
   //    resource: User,
@@ -109,6 +129,12 @@ const AdminBroOptions = {
     //  },
  // },
 ],
+dashboard: {
+  handler: async () => {
+    return { some: 'output' }
+  },
+  component: AdminBro.bundle('../../components/some-stats'),
+},
   branding: {
     companyName: 'Lexvalor - Propiedad Intelectual',
 
@@ -116,6 +142,7 @@ const AdminBroOptions = {
     logo: "/logo-lexvalor.png"
   
   },
+  
   locale : {translations}
 };
 

@@ -129,7 +129,11 @@ const translations = {
     countryDelSignoId : 'País del Signo',
     userResponsableId: 'Responsable del Trámite',
     listaProductoServicio: 'Lista de Productos o Servicios',
-    profileExcelLocation: 'Excel de Marcas'
+    profileExcelLocation: 'Excel de Marcas',
+    marcaPorVencerMeses:'Marca',
+    cantidadPorVencerMeses:'Meses por Vencer',
+    customPage: 'Home',
+    anotherPage: 'Home',
   },
   resources: {
     Email: 'Correo electrónico de resources',

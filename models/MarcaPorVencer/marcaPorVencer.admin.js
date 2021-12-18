@@ -1,10 +1,19 @@
  
-const { Marca } = require('../Marca/marca.entity');
+const { MarcaPorVencer } = require('../MarcaPorVencer/marcaPorVencer.entity');
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 const AdminBro         = require('admin-bro');
 
+const PropiedadIntelectualNav2 = {
+  name: 'Métricas',
+  //icon: 'Password',
+  icon:'Apps',
+};
 
 const options = {
+  navigation: PropiedadIntelectualNav2,  
+  new: { 
+    isDisabled: true,
+  },
   properties: {
     // properties: {
     //   tipoEstados: { isVisible: { list: true, show: true, edit: true, filter: true } },
@@ -16,12 +25,21 @@ const options = {
     //   }
     // }
   },
-  listProperties: ['titular', 'denominacionCompleta', 'claseInternacionalId',
-  'fechaSolicitud','numeroSolicitud','fechaTitulo','numeroTitulo','gacetaId','tipoEstados'],
+  listProperties: ['tipoEstado', 'marcaPorVencerMeses', 'cantidadPorVencerMeses','fechaPorVencer'],
+  actions: {
+    edit: { 
+      isDisabled: true,
+    },
+    new: { 
+      isDisabled: true,
+      isVisible: false,
+    },
+  }
+
 };
 
 module.exports = {
     options,
-    resource: Marca,
+    resource: MarcaPorVencer,
   }
 //module.exports = options;
