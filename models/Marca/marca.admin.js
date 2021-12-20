@@ -100,7 +100,7 @@ const PropiedadIntelectualNav = {
 
     },
     //showProperties, editProperties and filterProperties.
-    listProperties: ['titular', 'denominacionCompleta', 'claseInternacionalId',
+    listProperties: ['titular','esCliente', 'denominacionCompleta', 'claseInternacionalId',
     'fechaSolicitud','numeroSolicitud','fechaTitulo','numeroTitulo','gacetaId'],
   
   };

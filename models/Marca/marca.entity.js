@@ -127,10 +127,14 @@ const MarcaSchema = new mongoose.Schema({
     'Olfativo',
     'Táctil' ],
   },
-    titular: {
-      type: String,
-      required: true
-    },  
+  titular: {
+    type: String,
+    required: true
+  },  
+  esCliente: {
+    type: Boolean,
+    
+  },  
   listaProductoServicio: {
     type: String,							
   },
@@ -138,7 +142,7 @@ const MarcaSchema = new mongoose.Schema({
     type: String,
 
   },
-fechaSolicitud: {
+  fechaSolicitud: {
     type: Date, default: Date.now()
   },
   fechaTitulo: {

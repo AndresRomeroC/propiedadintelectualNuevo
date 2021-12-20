@@ -445,11 +445,17 @@ const afterNewHookUpload = async (response, context) => {
             // Existen terminos que no deben ser comparados en la Similitud Exacta o Media.
             /////////////////////////////////////////////////////////////////////////
             //const denominacionCompleta = "LOGOTIPO arc ELIASs PERRO SAPO";
-            const terminos_no_comparativos = new Array("GRÁFICA", "DISEÑO", "MIXTA",  
-            "FIGURATIVA", "DENOMINATIVA", "NOMINATIVA", "ISOTIPO",
-            " MÁS LOGOTIPO","MÁS LOGOTIPO ",  "MÁS LOGOTIPO", "& LOGOTIPO", "LOGOTIPO", "LOGO",
-            "& DESIGN","DESIGN",
-            "& DEVICE","DEVICE",  );
+            const terminos_no_comparativos = new Array(
+            " GRÁFICA","GRÁFICA ", "GRÁFICA", 
+            " DISEÑO", "DISEÑO ", "DISEÑO", 
+            " MIXTA", "MIXTA ", "MIXTA",  
+            " FIGURATIVA", "FIGURATIVA ","FIGURATIVA",
+            " DENOMINATIVA", "DENOMINATIVA ","DENOMINATIVA", " NOMINATIVA", "NOMINATIVA ","NOMINATIVA",
+            " ISOTIPO","ISOTIPO ","ISOTIPO",
+            " MÁS LOGOTIPO","MÁS LOGOTIPO ",  "MÁS LOGOTIPO", 
+            " & LOGOTIPO", "& LOGOTIPO ", "& LOGOTIPO", " LOGOTIPO","LOGOTIPO ", "LOGOTIPO"," LOGO","LOGO ","LOGO",
+            " & DESIGN","& DESIGN ","& DESIGN"," DESIGN", "DESIGN ", "DESIGN",
+            " & DEVICE","& DEVICE ","& DEVICE", " DEVICE", "DEVICE ","DEVICE" );
             
             let denominacionCompletaT = JSON.parse( JSON.stringify( dato.denominacionCompleta ) );
             let denominacionSinTermino = JSON.parse( JSON.stringify( dato.denominacionCompleta ) );
@@ -555,7 +561,8 @@ const afterNewHookUpload = async (response, context) => {
               {
                 $match: 
                 {
-                  denominacionCompleta: { $regex: `^${denominacion6Primeros0}`}//{ $regex: /^BARCELONA/ }
+                 // denominacionCompleta: { $regex: `^${denominacion6Primeros0}`}//{ $regex: /^BARCELONA/ }
+                  denominacionCompleta: { $regex: `${denominacion6Primeros0}`}//{ $regex: /^BARCELONA/ }
                 }
               }, 
               { 

@@ -72,62 +72,6 @@ const AdminBroOptions = {
     NizaClass,
     UserA,
     MarcaPorVencer
-  //  MisMarcas
-  //  {
-  //    resource: User,
-  //    options: {
-  //      navigation: UsuariosNav,
-  //      properties: {
-  //        encryptedPassword: {
-  //          isVisible: false,
-  //        },
-  //        password: {
-  //          type: 'string',
-  //          isVisible: {
-  //            list: false, edit: true, filter: false, show: false,
-  //          },
-  //        },
-  //        CreatedDate: {
-  //          type: 'date',
-  //          isVisible: {
-  //            list: true, edit: false, filter: true, show: true,
-  //          },
-  //        },
-  //      },
-  //      actions: {
-  //        edit: { isAccessible: onlyAdmin },
-  //        delete: { isAccessible: onlyAdmin },
-  //        new: {
-  //          isAccessible: onlyAdmin,
-  //          before: async (request) => {
-  //            if(request.payload.password) {
-  //              request.payload = {
-  //                ...request.payload,
-  //                encryptedPassword: await bcrypt.hash(request.payload.password, 10),
-  //                password: undefined,
-  //              }
-  //            }
-  //            return request
-  //          },
-  //        }
-  //      }
-  //    },
-     // pages: {
-     //    customPage: {
-     //       label: "Custom page",
-     //      handler: async (request, response, context) => {
-     //        return {
-     //          text: 'I am fetched from the backend',
-     //        }
-     //      },
-     //      component: AdminJS.bundle('./components/some-stats'),
-     //    },
-    //    anotherPage: {
-    //      label: "TypeScript page",
-    //      component: AdminJS.bundle('./components/test-component'),
-    //    },
-    //  },
- // },
 ],
 dashboard: {
   handler: async () => {
