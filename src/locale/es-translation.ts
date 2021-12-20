@@ -33,7 +33,7 @@ const translations = {
       },
       buttons: {
         save: 'Guardar',
-        addNewItem: 'Nuevito registro',
+        addNewItem: 'Nuevo registro',
         filter: 'Filtrar',
         applyChanges: 'Aplicar cambios',
         resetFilter: 'Limpiar',
