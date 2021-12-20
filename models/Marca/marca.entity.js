@@ -79,6 +79,10 @@ const MarcaSchema = new mongoose.Schema({
     'Recurso de reposición'  ],
     default: 'En trámite',
   }, 
+  esCliente: {
+    type: Boolean,
+    
+  }, 
   tipoRegistro:{
     type: String,
     enum: [
@@ -130,11 +134,7 @@ const MarcaSchema = new mongoose.Schema({
   titular: {
     type: String,
     required: true
-  },  
-  esCliente: {
-    type: Boolean,
-    
-  },  
+  },   
   listaProductoServicio: {
     type: String,							
   },
@@ -178,7 +178,7 @@ const MarcaSchema = new mongoose.Schema({
     //   message: '{VALUE} no es un número entero válido de 10 dígitos!'
     // },
   },
-documentoAdjunto:String,
+  documentoAdjunto:String,
   fechaCreacion: {
     type: Date, default: Date.now()
   },
@@ -199,6 +199,7 @@ documentoAdjunto:String,
       ref: 'Marca',
     },
   ],
+
   // content: {
   //   type: String,
   // }, 

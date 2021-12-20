@@ -13,12 +13,17 @@ const afterHookUpload = async (response, context) => {
   
   const { record, documentoAdjunto } = context;
   if (documentoAdjunto) {
-
+    console.log('/////////////////////////////////////////////////////////////////////');
+    console.log(documentoAdjunto);
+    console.log('/////////////////////////////////////////////////////////////////////');
+    console.log(record);
+    console.log('/////////////////////////////////////////////////////////////////////');
+    
     /////////////////////////////////////////////////////////////////////
     //await rimraf.sync(record.params.avatar.substring(0));
     ///////////////////////////////////////////////////////////////////// Revisar utilidad :
 
-    const filePath = path.join('uploads\\MarcaPdf', record.id().toString(), documentoAdjunto.name);
+    const filePath = path.join('uploads\\Marca', record.id().toString(), documentoAdjunto.name);
     
     await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
     
@@ -36,9 +41,9 @@ const afterHookUpload = async (response, context) => {
     await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
     //console.log(unNombre);
 
-    const pathPdf = `D:\\adminbro\\luandev\\adminbro-master\\${filePath}`;
-    console.log(pathPdf);
-    console.log(` el Path del Pdf Adjunto es : ${pathPdf}`);
+    // const pathPdf = `D:\\adminbro\\luandev\\adminbro-master\\${filePath}`;
+    // console.log(pathPdf);
+    // console.log(` el Path del Pdf Adjunto es : ${pathPdf}`);
 
 
   }
