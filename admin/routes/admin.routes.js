@@ -21,6 +21,8 @@ const buildAdminRouter = (admin) => {
             cookieName: 'admin-bro',
             cookiePassword: 'superlongandcomplicatedname',
             authenticate: async (email, password) => {
+              try {
+                
                 const user = await User.findOne({ email }); 
                 
                 if (user) {
@@ -36,6 +38,10 @@ const buildAdminRouter = (admin) => {
                 // }
                 // true si la clave y contraseña es correcta, false si existe error
                 return false;
+                
+              } catch (err) {
+                console.log(err);
+              }
       },
     },
     null,
