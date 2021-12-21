@@ -37,7 +37,7 @@ const buildAdminRouter = (admin) => {
                 //     return user.toJSON();
                 // }
                 // true si la clave y contraseña es correcta, false si existe error
-                return false;
+                return true;
                 
               } catch (err) {
                 console.log(err);
