@@ -43,7 +43,30 @@ exports.job = async () => {
                       ]
                 }
             }
-        }
+        },
+        { 
+            $lookup:{
+                from: "customers",
+                localField: "titular",
+                foreignField: "Name",
+                pipeline: [ 
+            
+                { $match: { Name: { $exists: true } } },
+                ],
+                as: "customers"
+
+            }                
+        },
+        {
+            $project:{
+             _id:1,
+             //titular:1,
+             customers : 1
+           }
+        },
+        {$unwind:"$customers"},
+        {$match:{"customers":{$ne:[]}}}
+        
         ]).exec();
     
         if(conSimilitudExacta.length){

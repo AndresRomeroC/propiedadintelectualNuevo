@@ -997,6 +997,74 @@ const afterDeleteHookUpload = async (response, context) => {
 };
 
 
+const afterBulkDeleteHookUpload = async (request, response, context) => {
+
+  const formaN = true;
+  
+  // const { records, resource, h, translateMessage } = context
+
+  // console.log('==================== records del context');
+  // console.log(records);
+  // console.log('==================== records del context');
+
+  
+
+  // if (request.method === 'post') {
+  //   for(let i = 0; i < records.length; i++) {
+
+  //     let gacetaIdN = records[i].params._id;
+
+  //     console.log('==================== records[i].params._id');
+  //     console.log(gacetaIdN);
+  //     console.log('==================== records[i].params._id');
+  //   }
+  // }
+
+  if(formaN){
+    
+    const { records, resource, h, translateMessage } = context;
+
+    if (!records || !records.length) {    
+      throw new NotFoundError('no records were selected.', 'Action#handler')
+    }
+
+    if (request.method === 'post') {
+      const { records } = response;
+      
+      let msgDelete = new Array();
+      for(let i = 0; i < records.length; i++) {
+                    
+        let gacetaIdN = records[i].params._id;
+
+        console.log('==================== record.params.NumberId');
+        console.log(gacetaIdN);
+        console.log('==================== new ObjectId(gacetaIdN)');
+    
+        const marcasBorradas = await Marca.deleteMany(
+        { gacetaId: gacetaIdN, 
+          //tipoEstado :  {$in: ["Publicada1"]}
+        }).exec()
+    
+        if(marcasBorradas){
+          console.log('==================== INICIO marcasBorradas');
+          console.log(marcasBorradas);
+          console.log('==================== INICIO marcasBorradass');
+
+          if(marcasBorradas.deletedCount == 0 ){
+            msgDelete.push(`** = Gaceta número ${records[i].title} eliminada con éxito = **`);
+          }else{
+            msgDelete.push(`** = Gaceta número ${records[i].title} y sus ${marcasBorradas.deletedCount} Marcas fueron eliminadas con éxito = **`);
+          }
+        }else{
+         msgDelete.push(`** = Gaceta número ${records[i].title} eliminada con éxito = **`);
+        }
+      } 
+      response.notice.message = msgDelete;
+      response.notice.type = 'success';
+    }
+  }
+  return response;
+};
 ///////////////////////////////////////////////////////////////////////////////////////////////.
 /////////////////////////////////////////////////        1   
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1118,4 +1186,4 @@ const beforeHookUpload = async (request, context, modifiedRequest) => {
     return response;
   };
 
-module.exports = { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload};
+module.exports = { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload, afterBulkDeleteHookUpload};

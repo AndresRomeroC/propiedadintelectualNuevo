@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const rimraf = require('rimraf');
 const XLSX  = require('xlsx');
+const mongoose = require('mongoose');
 
 
 const  { MarcaSchema, Marca }                                = require('../models/Marca/marca.entity');
@@ -107,6 +108,76 @@ const afterNewHookUpload = async (response, context) => {
   return response;
 };
 
+const afterDeleteHookUpload = async (response, context) => {
+
+  // console.log('==================== INICIO RESPONSE');
+  // console.log(response);
+  // console.log('==================== FIN RESPONSE');
+  
+  // console.log('==================== INICIO context');
+  // console.log(context);
+  // console.log('==================== INICIO context');
+  const formaN = true;
+  if(formaN){
+    
+    const { record, profileExcelLocation } = context;
+    
+    const marcaIdN =  record.params._id;
+
+    console.log('==================== record.params.NumberId');
+    console.log(marcaIdN);
+    console.log('==================== new ObjectId(gacetaIdN)');
+    //var o_id = new ObjectId(gacetaIdN);
+    //console.log(  o_id );
+    let conSimilitudExacta =new Array();
+
+    conSimilitudExacta = await Marca.aggregate([
+      {
+          $match: 
+          {
+            marcaConSimilitudMedia: mongoose.Types.ObjectId(`${marcaIdN}`)
+              //fechaVencimientoResolucion: { $exists: true },
+              //fechaVencimientoResolucion : {$gte : new Date()},
+              //denominacionCompleta: { $regex: `^${denominacionSinTermino}$`}//{ $regex: /^BARCELONA/ }
+             
+          }
+      }
+      
+      ]).exec();
+
+
+      //if(conSimilitudExacta.length){
+        console.log('--------------------------------------- : RESULTADO DEL QUERY conSimilitudExacta');
+        console.log(conSimilitudExacta); 
+        console.log('--------------------------------------- FIN RESULTADO DEL QUERY conSimilitudExacta');
+     // }
+
+
+
+     const marcasBorradas = await Marca.updateMany(
+       { marcaConSimilitudMedia: mongoose.Types.ObjectId(`${marcaIdN}`)
+       },
+       { $pull: {  marcaConSimilitudMedia: mongoose.Types.ObjectId(`${marcaIdN}`) }}, // item(s) to match from array you want to pull/remove
+       { multi: true } // set this to true if you want to remove multiple elements.
+   
+     )
+  
+        console.log('==================== INICIO marcasBorradas');
+        console.log(marcasBorradas);
+        console.log('==================== INICIO marcasBorradass');
+
+        // var msgDelete = `Gaceta número ${record.params.NumberId} eliminada con éxito`
+
+        // if(marcasBorradas)
+        //   msgDelete = `Gaceta número ${record.params.NumberId} y sus ${marcasBorradas.deletedCount} Marcas fueron eliminadas con éxito`
+
+        // response.notice.message = msgDelete;
+        // response.notice.type = 'success';
+    
+  }
+  return response;
+};
+
 const beforeHookUpload = async (request, context) => {
   
   // console.log('=============== INICIO DE request DE beforeHookUpload');
@@ -166,4 +237,4 @@ const afterHookPassword = async (response, context) => {
   return response;
 };
 
-module.exports = { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload };
+module.exports = { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload};

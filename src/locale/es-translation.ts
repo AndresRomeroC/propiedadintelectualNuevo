@@ -215,6 +215,7 @@ const translations = {
         'dashboard.component' : 'Panel de Control',
         Select : 'Seleccionar',
         Yes : 'Sí',
+        doYouReallyWantToDoThisGaceta: 'Estás seguro de eliminar la Gaceta?',
         
       },
     //}

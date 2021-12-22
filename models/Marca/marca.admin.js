@@ -18,7 +18,7 @@ const AdminBro = require('admin-bro');
 const { Marca } = require('./marca.entity');
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
-const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload} = require('../../hooks/marca.hooks');
+const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload} = require('../../hooks/marca.hooks');
 
 const PropiedadIntelectualNav = {
     name: 'Propiedad Intelectual',
@@ -96,7 +96,16 @@ const PropiedadIntelectualNav = {
           return afterNewHookUpload(response, context, modifiedResponse);
           },
         },
-        delete: { isAccessible: onlyAdmin },
+        delete: { 
+          isAccessible: onlyAdmin,
+
+          after: async (response, request, context) => {
+            const modifiedResponse = await afterHookPassword(response, context);
+    
+            return afterDeleteHookUpload(response, context, modifiedResponse);
+            },
+        },
+
 
     },
     //showProperties, editProperties and filterProperties.

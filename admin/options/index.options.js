@@ -4,6 +4,7 @@ const translations     =  require('../../src/locale/es-translation.ts');
 const mongoose = require('mongoose');
 
 
+
 //Models
 //const UserM      = require('../../models/User/user.entity');
 const UserA      = require('./user.admin');
@@ -74,16 +75,37 @@ const AdminBroOptions = {
     MarcaPorVencer
 ],
 dashboard: {
-  handler: async () => {
-    return { some: 'output' }
+  
+  
+   handler: async () => {
+    
+   // req.session.redirectTo = './admin/resources/MarcaPorVencer'
+   // res.redirect('./admin/resources/MarcaPorVencer')
+   // component: AdminBro.bundle(redirect('./admin/resources/MarcaPorVencer'))
+  //  // return (<Redirect to="/route/to/redirect" />);
+  //   //return { redirectTo: './admin/resources/MarcaPorVencer' }
+    
+  //return res
+     return { some: 'output' }
+  //res.redirect('/admin/resources/MarcaPorVencer')
+    // app.get('/',function(req,res){
+    //   // On getting the home route request,
+    //   // the user will be redirected to GFG website
+    //   res.redirect('https://www.geeksforgeeks.org');
+    // });
   },
   component: AdminBro.bundle('../../components/some-stats'),
+  //component: AdminBro.bundle(redirect('./admin/resources/MarcaPorVencer'))
+  //redirectUrl : './admin/resources/MarcaPorVencer'
+  
+  //component: AdminBro.bundle('./admin/resources/MarcaPorVencer'),
+  //component : MarcaPorVencer,
 },
   branding: {
     companyName: 'Lexvalor - Propiedad Intelectual',
-
+    //theme,
     softwareBrothers: false,
-    logo: "/logo-lexvalor.png"
+    logo: "/logo-lexvalor6.png"
   
   },
   

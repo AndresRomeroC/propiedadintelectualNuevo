@@ -26,7 +26,7 @@ const { ValidationError } = require ('admin-bro');
 
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
-const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload} = require('../../hooks/gaceta.hooks');
+const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload, afterBulkDeleteHookUpload} = require('../../hooks/gaceta.hooks');
 const { default: adminBro } = require('admin-bro');
 
 
@@ -83,7 +83,31 @@ const options = {
     sortBy : 'NumberId',
     direction: 'desc',
   },
+  
   actions: {
+      bulkDelete : { 
+        //1.-opcion deshabilitar
+        //isDisabled: true,
+        //isVisible: false,
+
+        // Solo hace que ocupe todo el Frame
+        //showInDrawer: false,
+
+        
+        //guard: 'doYouReallyWantToDoThisGaceta',
+        //showInDrawer: false,
+       
+        // // before: async (request, context) => {
+        // //   const modifiedRequest = await beforeHookPassword(request, context);
+
+        // //   return beforeHookUpload(request, context, modifiedRequest);
+        // // },
+         after: async (response, request, context) => {
+         const modifiedResponse = await afterHookPassword(response, context);
+
+         return afterBulkDeleteHookUpload(request, response, context, modifiedResponse);
+         },
+      },
       edit: { 
         isAccessible: onlyAdmin,
 
@@ -100,6 +124,7 @@ const options = {
       },
       delete: { 
         isAccessible: onlyAdmin , 
+        guard: 'doYouReallyWantToDoThisGaceta',
         before: async (request, context) => {
           const modifiedRequest = await beforeHookPassword(request, context);
 
