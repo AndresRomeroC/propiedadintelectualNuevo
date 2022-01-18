@@ -26,7 +26,8 @@ const { ValidationError } = require ('admin-bro');
 
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
-const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload, afterBulkDeleteHookUpload} = require('../../hooks/gaceta.hooks');
+const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, 
+  afterNewHookUpload, afterDeleteHookUpload, afterBulkDeleteHookUpload, exportarGacetaHookUpload} = require('../../hooks/gaceta.hooks');
 const { default: adminBro } = require('admin-bro');
 
 
@@ -85,6 +86,27 @@ const options = {
   },
   
   actions: {
+    exportarGaceta: {
+      actionType: 'record',
+      icon: 'View',
+      isVisible: true,
+      // handler: async () => {
+      //     return { some: 'output' }
+      //  },
+      // component: AdminBro.bundle('../../components/some-stats'),
+      before: async (request, context) => {
+        const modifiedRequest = await beforeHookPassword(request, context);
+
+        return beforeHookUpload(request, context, modifiedRequest);
+      },
+      handler: async (response, request, context) => {
+        const modifiedResponse = await afterHookPassword(response, context);
+
+        return exportarGacetaHookUpload(request, response, context, modifiedResponse);
+        },
+        component: false,
+    },
+
       bulkDelete : { 
         //1.-opcion deshabilitar
         //isDisabled: true,

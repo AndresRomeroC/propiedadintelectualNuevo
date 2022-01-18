@@ -16,6 +16,17 @@ const Customer  = require('../../models/Customer/customer.admin');
 const NizaClass = require('../../models/NizaClass/nizaClass.admin');
 const ClaseInternacional     = require('../../models/ClaseInternacional/claseInternacional.admin');
 const MarcaPorVencer     = require('../../models/MarcaPorVencer/marcaPorVencer.admin');
+
+const MarcaConResolucion     = require('../../models/MarcaConResolucion/marcaConResolucion.admin');
+const MarcaEnOposicion     = require('../../models/MarcaEnOposicion/marcaEnOposicion.admin');
+const MarcaEnRenovacion     = require('../../models/MarcaEnRenovacion/marcaEnRenovacion.admin');
+const MarcaProcesoCambioNombre     = require('../../models/MarcaProcesoCambioNombre/marcaProcesoCambioNombre.admin');
+const MarcaProcesoLicenciada     = require('../../models/MarcaProcesoLicenciada/marcaProcesoLicenciada.admin');
+const MarcaPublicada     = require('../../models/MarcaPublicada/marcaPublicada.admin');
+const MarcaSinPublicar     = require('../../models/MarcaSinPublicar/marcaSinPublicar.admin');
+const MarcaProcesoTransferencia     = require('../../models/MarcaProcesoTransferencia/marcaProcesoTransferencia.admin');
+const EstadoMarca    = require('../../models/EstadoMarca/estadoMarca.admin');
+
 //const CustomXVencer     = require('../../models/CustomXVencer/customXVencer');
 
 // const PropiedadIntelectualNav = {
@@ -72,9 +83,18 @@ const AdminBroOptions = {
     Country,
     NizaClass,
     UserA,
-    MarcaPorVencer
-],
-dashboard: {
+    MarcaPorVencer,
+    MarcaConResolucion,
+    MarcaEnRenovacion,
+    MarcaEnOposicion,
+    MarcaProcesoLicenciada,  
+    MarcaProcesoCambioNombre,
+    MarcaPublicada,
+    MarcaSinPublicar,
+    MarcaProcesoTransferencia,
+    EstadoMarca,
+  ],
+  dashboard: {
   
   
    handler: async () => {

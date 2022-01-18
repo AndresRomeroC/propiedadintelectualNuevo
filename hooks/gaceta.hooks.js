@@ -10,6 +10,7 @@ const  { MarcaSchema, Marca }                                = require('../model
 const  { GacetaSchema, Gaceta }                              = require('../models/Gaceta/gaceta.entity');
 const  { ClaseInternacionalSchema, ClaseInternacional }      = require('../models/ClaseInternacional/claseInternacional.entity');
 const  { CustomerSchema, Customer }      = require('../models/Customer/customer.entity');
+const  { EstadoMarcaSchema, EstadoMarca }      = require('../models/EstadoMarca/estadoMarca.entity');
 
 
 const { ObjectId } = require('mongoose/lib/schema/index');
@@ -718,12 +719,24 @@ const afterNewHookUpload = async (response, context) => {
             console.log(arrConSinSimilitud);
            
            }
+          //ARC
+          if(true){
+            const existeEstadoMarca = await EstadoMarca.findOne({ nombreEstado: 'Publicada' }).exec()
+
+              if(existeEstadoMarca){
+                dato.estadoMarcaId = existeEstadoMarca._id;
+              }
+          }
             
            //if(forma3){ // PARA PRUEBAS SIN GUARDAR NADA
             // encuentra marcas con el mismo numero de solicitud, si la encuentra la pone en estado PUBLICADA
             // Si no encuentra entones la Guarda como Marca Nueva.
-            Marca.findOneAndUpdate({numeroSolicitud : dato.numeroSolicitud }, {$set:{tipoEstado:"Publicada", gacetaId: dato.gacetaId}}, {new: true}, (err, result) => {
-              console.log('--------------------------------------------------------------------------------- INICIO forma 300');
+            
+            //ARC
+            //Marca.findOneAndUpdate({numeroSolicitud : dato.numeroSolicitud }, {$set:{tipoEstado:"Publicada", gacetaId: dato.gacetaId}}, {new: true}, (err, result) => {
+            Marca.findOneAndUpdate({numeroSolicitud : dato.numeroSolicitud }, {$set:{estadoMarcaId:dato.estadoMarcaId, gacetaId: dato.gacetaId}}, {new: true}, (err, result) => {
+            
+            console.log('--------------------------------------------------------------------------------- INICIO forma 300');
           // Validacion de denominacion completa y titular
           // if(conSimilitudExacta.length){
           //   //verificar si el titular es de LexValor
@@ -844,7 +857,8 @@ const afterNewHookUpload = async (response, context) => {
                 //     console.log('---------------------XXX totalRegistrosSinSimilitud' );
                 //   }
                 
-                dato.tipoEstado= "Publicada";
+                //ARC
+                //dato.tipoEstado= "Publicada";
                  Marca.insertMany(dato).then(function(){
                     console.log("Data inserted")  // Success
                     
@@ -989,13 +1003,49 @@ const afterDeleteHookUpload = async (response, context) => {
         if(marcasBorradas)
           msgDelete = `Gaceta número ${record.params.NumberId} y sus ${marcasBorradas.deletedCount} Marcas fueron eliminadas con éxito`
 
-        response.notice.message = msgDelete;
+        response.message = msgDelete;
         response.notice.type = 'success';
     
   }
   return response;
 };
 
+const exportarGacetaHookUpload = async (request, response, context) => { 
+  
+  console.log('1 ------- EXPORTAR GACETA --------');
+
+   const { record, resource, h, translateMessage } = context
+  console.log('==================== records del context');
+  console.log(record);
+   console.log('==================== records del context');
+
+   console.log('==================== records del response');
+  console.log(response);
+   console.log('==================== records del response');
+
+   
+  if (request.method === 'get') {
+   
+    
+    console.log('------- EXPORTAR GACETA --------');
+    
+  }
+  console.log(' 3------- EXPORTAR GACETA --------');
+
+  msgDelete = `Gaceta exportada con éxito`;
+
+        response.message = msgDelete;
+        response.type = 'success';
+
+  return  {
+    record: record.toJSON(record.currentAdmin),
+    //redirectUrl: data.h.resourceActionUrl({ resourceId: data.resource.id(), actionName: 'list' }),
+    notice: {
+      message: 'Successfully removed given record',
+      type: 'success',
+    },
+  }
+}
 
 const afterBulkDeleteHookUpload = async (request, response, context) => {
 
@@ -1186,4 +1236,5 @@ const beforeHookUpload = async (request, context, modifiedRequest) => {
     return response;
   };
 
-module.exports = { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, afterNewHookUpload, afterDeleteHookUpload, afterBulkDeleteHookUpload};
+module.exports = { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload,
+   afterNewHookUpload, afterDeleteHookUpload, afterBulkDeleteHookUpload, exportarGacetaHookUpload};

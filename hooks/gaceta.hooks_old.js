@@ -143,7 +143,7 @@ const afterHookUpload = async (response, context) => {
         //    });
         //  }else{
 
-            Marca.findOneAndUpdate(query, {$set:{tipoEstados:"Caducidad del trámite de renovación"}}, {new: true}, (err, result) => {
+            Marca.findOneAndUpdate(query, {$set:{tipoEstados:"En trámite"}}, {new: true}, (err, result) => {
               if (err) {
                   console.log("Something wrong when updating data!");
               }
@@ -454,7 +454,13 @@ const afterNewHookUpload = async (response, context) => {
                   dato.claseInternacionalId = existeClaseInternacional._id;
                 }
             }
+            if(true){
+              const existeEstadoMarca = await EstadoMarca.findOne({ nombreEstado: 'Publicada' }).exec()
 
+                if(existeEstadoMarca){
+                  dato.estadoMarcaId = existeEstadoMarca._id;
+                }
+            }
             //console.log(existeMarca);
     
             //  if( existeMarca == null ){
@@ -468,7 +474,8 @@ const afterNewHookUpload = async (response, context) => {
             //    });
             //  }else{
     
-            Marca.findOneAndUpdate(query, {$set:{tipoEstados:"Publicada"}}, {new: true}, (err, result) => {
+           //Marca.findOneAndUpdate(query, {$set:{tipoEstados:"Publicada"}}, {new: true}, (err, result) => {
+            Marca.findOneAndUpdate(query, {$set:{estadoMarcaId:existeEstadoMarca._id}}, {new: true}, (err, result) => {
               if (err) {
                   console.log("Something wrong when updating data!");
                   Gaceta.deleteOne({

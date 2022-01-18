@@ -105,7 +105,7 @@ const PropiedadIntelectualNav = {
             return afterDeleteHookUpload(response, context, modifiedResponse);
             },
         },
-
+       
 
     },
     //showProperties, editProperties and filterProperties.

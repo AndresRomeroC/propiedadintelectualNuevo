@@ -1,90 +1,77 @@
-// const Estados = new mongoose.Schema({
-//   name: String,
-//   tipoEstado: {
+const mongoose = require('mongoose');
+
+//  const EstadosMulti = new mongoose.Schema({
+//    // name: String,
+//     tipoEstado: {
 //     type: String,
-//     enum: [
-//     'En trámite',
-//     'No presentada',
-//     'Publicada',
-//     'Pago de tasa de registro',
-//     'Registrada',
-//     'Renovada',
-//     'No renovar',
-//     'Transferida',
-//     'Vencida',
-//     'Desistida',
-//     'Cancelada',
-//     'Anulada',
-//     'Negada',
-//     'Inactiva',
-//     'Suspedida',
-//     'Abandono',
-//     'Oposición',
-//     'Concedida',
-//     'Recurso de Reposición',
-//     'Recurso de Revisión',
-//     'Caducidad del trámite',
-//     'Caducidad del trámite de renovación',
-//     'En proceso de cambio de nombre',
-//     'En proceso de transferencia',
-//     'En proceso de renovación',
-//     'En proceso de cancelación',
-//     'Recurso de reposición'  ],
-//   },
-// });
+//      enum: [
+//      'En trámite',
+//      'No presentada',
+//      'Publicada',
+//      'Pago de tasa de registro',
+//      'Registrada',
+//      'Renovada',
+//      'No renovar',
+//      'Transferida',
+//      'Vencida',
+//      'Desistida',
+//      'Cancelada',
+//      'Anulada',
+//      'Negada',
+//      'Inactiva',
+//      'Suspedida',
+//      'Abandono',
+//      'Oposición',
+//      'Concedida',
+//      'Recurso de Reposición',
+//      'Recurso de Revisión',
+//      'Caducidad del trámite',
+//      'Caducidad del trámite de renovación',
+//      'En proceso de cambio de nombre',
+//      'En proceso de transferencia',
+//      'En proceso de renovación',
+//      'En proceso de cancelación',
+//      'Recurso de reposición'  ],
+//    },
+//  });
 
 // const OtherSchema = new mongoose.Schema({
-//   name: String,
-//   arrayed: {
-//     type: [Estados],
-//   },
+//   //name: String,
+//   //arrayed: {
+//     type: [EstadosMulti],
+//   //},
 // });
 
-const mongoose = require('mongoose');
+// const TipoRegistroRol = new mongoose.Schema({
+ 
+//   name: String,
+//   arrayed: {
+//     type: [
+//     'Local',
+//     'Local extranjero', 
+//     'Extranjero local', 
+//     'Internacional ' ],
+  
+//   },
+// });
 
 const MarcaSchema = new mongoose.Schema({
   denominacionCompleta: {
     type: String,
     required: true
   },
-  tipoEstado: {
-    type: String,
-    enum: [
-    'En trámite',
-    'No presentada',
-    'Publicada',
-    'Pago de tasa de registro',
-    'Registrada',
-    'Renovada',
-    'No renovar',
-    'Transferida',
-    'Vencida',
-    'Desistida',
-    'Cancelada',
-    'Anulada',
-    'Negada',
-    'Inactiva',
-    'Suspedida',
-    'Abandono',
-    'Oposición',
-    'Concedida',
-    'Recurso de Reposición',
-    'Recurso de Revisión',
-    'Caducidad del trámite',
-    'Caducidad del trámite de renovación',
-    'En proceso de cambio de nombre',
-    'En proceso de transferencia',
-    'En proceso de renovación',
-    'En proceso de cancelación',
-    'Recurso de reposición'  ],
-    default: 'En trámite',
-  }, 
+  estadoMarcaId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'EstadoMarca',
+    },
+  ],
   esCliente: {
     type: Boolean,
     
   }, 
   tipoRegistro:{
-    type: String,
+    type: String  , 
     enum: [
     'Local',
     'Local extranjero', 
@@ -210,5 +197,9 @@ const MarcaSchema = new mongoose.Schema({
   });
 
 const Marca = mongoose.model('Marca', MarcaSchema);
-module.exports = { MarcaSchema, Marca };
+//const Other = mongoose.model('Other', OtherSchema);
+
+
+module.exports = { MarcaSchema, Marca  };
+//module.exports = { OtherSchema, Other };
   

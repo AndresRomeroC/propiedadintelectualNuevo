@@ -30,6 +30,7 @@ const translations = {
         'dashboard.component' : 'Panel de Control',
         Select : 'Seleccionar',
         Yes : 'Sí',
+        exportarGaceta : 'Exportar Gaceta',
       },
       buttons: {
         save: 'Guardar',
@@ -131,6 +132,8 @@ const translations = {
         countryId : 'País',
         claseInternacionalId: 'Clase Internacional',
         tipoEstado : 'Estado',
+        tipoEstadoMarca : 'Estados',
+        estadoMarcaId : 'Estados',
         tipoRegistro : 'Tipo de Registro',
         tipoNaturalezaDelSigno : 'Naturaleza del Signo',
         countryDelRegistroId : 'País de registro',
@@ -146,7 +149,15 @@ const translations = {
         Yes : 'Sí',
         esCliente : 'Cliente',
         'esCliente.true': 'Cliente',
-        'esCliente.false': ''
+        'esCliente.false': '',
+        marcaConResolucion: 'Marca con Resolución',
+        marcaEnOposicion: 'Marca En Oposición',
+        marcaEnRenovacion: 'Marca En Renovación',
+        marcaProcesoCambioNombre: 'Marca en Proceso de Cambiar Nombre',
+        marcaProcesoLicenciada: 'Marca en Proceso de emisión de Licencia',
+        marcaPublicada: 'Marca Publicada',
+        marcaSinPublicar: 'Marca Sin Publicar',
+
       },
       resources: {
         Email: 'Correo electrónico de resources',
