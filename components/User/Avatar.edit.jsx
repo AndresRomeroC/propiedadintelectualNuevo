@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Label, DropZone, DropZoneItem } from 'admin-bro';
+import { Box, Label, DropZone, DropZoneItem } from 'adminjs';
 
 export default function Avatar({ property, record, onChange }) {
   const [state, setState] = useState(false);

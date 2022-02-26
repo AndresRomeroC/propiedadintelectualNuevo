@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-//import { Box, Label, DropZone, DropZoneItem } from 'admin-bro';
-import { Box, Label, DropZone, DropZoneItem} from '@admin-bro/design-system'
+//import { Box, Label, DropZone, DropZoneItem } from 'adminjs';
+import { Box, Label, DropZone, DropZoneItem} from '@adminjs/design-system'
 
 const ProfileExcelLocation = ({ property, record, onChange }) => {
    const [state, setState] = useState(false);

@@ -1,7 +1,7 @@
 
 
 
-const AdminBro = require('admin-bro');
+const AdminJS = require('adminjs');
 
 
 
@@ -13,7 +13,7 @@ const customXvencer = {
         text: 'I am fetched from the backend',
       }
     },
-    component: AdminBro.bundle('../../components/some-stats2'),
+    component: AdminJS.bundle('../../components/some-stats2'),
   };
 
 

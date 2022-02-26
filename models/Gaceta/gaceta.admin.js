@@ -18,17 +18,17 @@
     //   } 
     // },
 
-const AdminBro = require('admin-bro');
+const AdminJS = require('adminjs');
 const { Gaceta } = require('./gaceta.entity');
 //const { ValidationError } = require ('./validation/ValidationError');
 
-const { ValidationError } = require ('admin-bro');
+const { ValidationError } = require ('adminjs');
 
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
 const { beforeHookPassword, afterHookPassword, beforeHookUpload, afterHookUpload, 
   afterNewHookUpload, afterDeleteHookUpload, afterBulkDeleteHookUpload, exportarGacetaHookUpload} = require('../../hooks/gaceta.hooks');
-const { default: adminBro } = require('admin-bro');
+
 
 
 
@@ -39,7 +39,7 @@ const PropiedadIntelectualNav = {
   };
 
   
-/** @type {AdminBro.ResourceOptions} */
+/** @type {AdminJS.ResourceOptions} */
 const options = {
 
   navigation: PropiedadIntelectualNav, 
@@ -73,10 +73,10 @@ const options = {
     },
     profileExcelLocation: {
       components: {
-        new: AdminBro.bundle('../../components/Gaceta/ProfileExcelLocation.edit.jsx'),
-        edit: AdminBro.bundle('../../components/Gaceta/ProfileExcelLocation.edit.jsx'),
-        //list: AdminBro.bundle('../../components/Gaceta/Avatar.list.jsx'),
-        //show: AdminBro.bundle('../../components/Gaceta/Avatar.list.jsx'),
+        new: AdminJS.bundle('../../components/Gaceta/ProfileExcelLocation.edit.jsx'),
+        edit: AdminJS.bundle('../../components/Gaceta/ProfileExcelLocation.edit.jsx'),
+        //list: AdminJS.bundle('../../components/Gaceta/Avatar.list.jsx'),
+        //show: AdminJS.bundle('../../components/Gaceta/Avatar.list.jsx'),
       },
     },
   },
@@ -93,7 +93,7 @@ const options = {
       // handler: async () => {
       //     return { some: 'output' }
       //  },
-      // component: AdminBro.bundle('../../components/some-stats'),
+      // component: AdminJS.bundle('../../components/some-stats'),
       before: async (request, context) => {
         const modifiedRequest = await beforeHookPassword(request, context);
 
@@ -171,7 +171,7 @@ const options = {
          
             if (modifiedRequest.payload.existeGaceta ){
                   if (modifiedRequest.payload.existeGaceta.NumberId) {
-                throw new AdminBro.ValidationError({
+                throw new AdminJS.ValidationError({
                   name: {
                     message: 'Error al Guardar Gaceta Nueva',
                   },
@@ -186,7 +186,7 @@ const options = {
              //console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx inicio request");
 
             if (request.payload.profileExcelLocation == null){
-                throw new AdminBro.ValidationError({
+                throw new AdminJS.ValidationError({
                   name: {
                     message: 'Error al Guardar Gaceta Nueva, no existe profileExcelLocation',
                   },
@@ -214,7 +214,7 @@ const options = {
                   }
                 }
                 if (!esDocumentoPermitido){
-                  throw new AdminBro.ValidationError({
+                  throw new AdminJS.ValidationError({
                     name: {
                       message: 'Error al Guardar Gaceta Nueva, No es Extension Permitida',
                     },

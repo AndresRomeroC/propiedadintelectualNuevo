@@ -1,7 +1,7 @@
 require('dotenv').config();
 const path             = require('path');
 const express          = require('express');
-const AdminBro         = require('admin-bro');
+const AdminJS         = require('adminjs');
 const schedule = require('node-schedule');
 
 
@@ -9,7 +9,7 @@ const schedule = require('node-schedule');
 app = express();
 const connection = require('./src/config/db.config');
 const { job }    = require('./src/Job/job');
-const options    = require('./admin/options/index.options');
+const AdminJSoptions    = require('./admin/options/index.options');
 const buildAdminRouter = require('./admin/routes/admin.routes');
 
 //Setings
@@ -21,7 +21,7 @@ const port = process.env.PORT || 8000;
 connection.once('open', ()=>console.log('Database connected Successfully'));
 connection.on("error", console.error.bind(console, "connection error: "));
 
-const adminBro = new AdminBro(options);
+const adminBro = new AdminJS(AdminJSoptions);
 const router = buildAdminRouter(adminBro);
 
 

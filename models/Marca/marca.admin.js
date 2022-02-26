@@ -14,7 +14,7 @@
 //                      'FechaSolicitud','NumeroSolicitud','FechaTitulo','NumeroTitulo','NumberIdGaceta'] 
 //   } 
 // },
-const AdminBro = require('admin-bro');
+const AdminJS = require('adminjs');
 const { Marca } = require('./marca.entity');
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
@@ -49,10 +49,10 @@ const PropiedadIntelectualNav = {
       },
       documentoAdjunto: {
         components: {
-          new: AdminBro.bundle('../../components/Marca/DocumentoAdjunto.edit.jsx'),
-          edit: AdminBro.bundle('../../components/Marca/DocumentoAdjunto.edit.jsx'),
-          list: AdminBro.bundle('../../components/Marca/DocumentoAdjunto.list.jsx'),
-          show: AdminBro.bundle('../../components/Marca/DocumentoAdjunto.list.jsx'),
+          new: AdminJS.bundle('../../components/Marca/DocumentoAdjunto.edit.jsx'),
+          edit: AdminJS.bundle('../../components/Marca/DocumentoAdjunto.edit.jsx'),
+          list: AdminJS.bundle('../../components/Marca/DocumentoAdjunto.list.jsx'),
+          show: AdminJS.bundle('../../components/Marca/DocumentoAdjunto.list.jsx'),
         },
       },
     },

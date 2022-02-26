@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from 'admin-bro'
+import { Box } from 'adminjs'
 
 const SimilitudExacta = (props) => {
   return (

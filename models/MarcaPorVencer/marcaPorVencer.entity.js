@@ -2,14 +2,14 @@ const mongoose = require('mongoose')
 
 const MarcaPorVencerSchema = new mongoose.Schema({
 
-    tipoEstado: {
-        type: String,
-        enum: [
-        'Inicial(Obtenida por el proceso de Marcas por Vencer)',
-        'En atención(Trabajando en Renovación)',
-        'Final(Resuelta, cambiar estado de Marca)'],
-        default: 'Inicial(Obtenida por el proceso de Marcas por Vencer)',
-      }, 
+    // tipoEstado: {
+    //     type: String,
+    //     enum: [
+    //     'Inicial(Obtenida por el proceso de Marcas por Vencer)',
+    //     'En atención(Trabajando en Renovación)',
+    //     'Final(Resuelta, cambiar estado de Marca)'],
+    //     default: 'Inicial(Obtenida por el proceso de Marcas por Vencer)',
+    //   }, 
     marcaPorVencerMeses: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Marca',

@@ -1,7 +1,7 @@
  
 const { EstadoMarca } = require('../EstadoMarca/estadoMarca.entity');
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
-const AdminBro         = require('admin-bro');
+const AdminJS         = require('adminjs');
 
 const BasicosNav = {
     name: 'Básicos',
@@ -20,8 +20,8 @@ properties: {
 
     // content: {
     //   components: {
-    //     //list: AdminBro.bundle('./city-content-in-list')
-    //     list: AdminBro.bundle('./Avatare-edit')
+    //     //list: AdminJS.bundle('./city-content-in-list')
+    //     list: AdminJS.bundle('./Avatare-edit')
     //   }
     // }
   },

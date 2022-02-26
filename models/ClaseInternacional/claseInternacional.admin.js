@@ -23,11 +23,19 @@ const BasicosNav = {
 const options = {
 
   navigation: BasicosNav, 
+  properties: {
+    _id: {
+        isVisible: {
+        list: false, edit: false, filter: false, show: false,
+        },
+    },
+  },
   actions: {
       edit: { isAccessible: onlyAdmin },
       delete: { isAccessible: onlyAdmin },
       new: { isAccessible: onlyAdmin },
-  },
+    },
+    listProperties: ['classInt', 'descriptionClassInt', 'typeClassInt'] 
 
 };
 

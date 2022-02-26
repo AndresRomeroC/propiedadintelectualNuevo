@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 const ClaseInternacionalSchema = new mongoose.Schema({
-    ClassInt: {
+    classInt: {
       type: String,
       required: true
     },
-    Description: {
+    descriptionClassInt: {
       type: String,
     },
-    Type: {
+    typeClassInt: {
       type: String,
       enum: ['Marca de Productos', 'Marca de Servicios', 'Lema Comercial', 'Marca Colectiva', 'Denominación Origen', 'Rótulo Enseña', 'Marca de Certificación', 'Apariencia Distintiva' , 'Indicación Geográfica', 'Nombre Comercial'], 
       required: true

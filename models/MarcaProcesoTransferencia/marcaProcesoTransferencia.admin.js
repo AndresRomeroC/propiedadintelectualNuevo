@@ -1,7 +1,7 @@
  
 const { MarcaProcesoTransferencia } = require('../MarcaProcesoTransferencia/marcaProcesoTransferencia.entity');
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
-const AdminBro         = require('admin-bro');
+const AdminJS         = require('adminjs');
 
 const PropiedadIntelectualNav2 = {
   name: 'Métricas',
@@ -20,8 +20,8 @@ const options = {
     // }, 
     // content: {
     //   components: {
-    //     //list: AdminBro.bundle('./city-content-in-list')
-    //     list: AdminBro.bundle('./Avatare-edit')
+    //     //list: AdminJS.bundle('./city-content-in-list')
+    //     list: AdminJS.bundle('./Avatare-edit')
     //   }
     // }
   },

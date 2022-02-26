@@ -4,7 +4,7 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 const XLSX  = require('xlsx');
 
-const AdminBro = require('admin-bro');
+const AdminJS = require('adminjs');
 
 const  { MarcaSchema, Marca }                                = require('../models/Marca/marca.entity');
 const  { GacetaSchema, Gaceta }                              = require('../models/Gaceta/gaceta.entity');
@@ -95,8 +95,8 @@ const afterHookUpload = async (response, context) => {
 
     if( existeGaceta == null ){
       //ARC :Obtener la ruta :
-      //D:\adminbro\propiedadintelectualNuevo
-      //const pathExcel = `D:\\adminbro\\propiedadintelectualNuevo\\${filePath}`;
+      //D:\AdminJS\propiedadintelectualNuevo
+      //const pathExcel = `D:\\AdminJS\\propiedadintelectualNuevo\\${filePath}`;
       
       const pathExcel = profileExcelLocation.path ;
       
@@ -350,8 +350,8 @@ const afterNewHookUpload = async (response, context) => {
   
      // if( existeGaceta == null ){
         //ARC :Obtener la ruta :
-        //D:\adminbro\propiedadintelectualNuevo
-        //const pathExcel = `D:\\adminbro\\propiedadintelectualNuevo\\${filePath}`;
+        //D:\AdminJS\propiedadintelectualNuevo
+        //const pathExcel = `D:\\AdminJS\\propiedadintelectualNuevo\\${filePath}`;
       
       await record.update({ profileExcelLocation: `/${filePath}` });
 

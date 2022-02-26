@@ -42,7 +42,7 @@ const afterHookUpload = async (response, context) => {
     await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
     //console.log(unNombre);
 
-    // const pathPdf = `D:\\adminbro\\luandev\\adminbro-master\\${filePath}`;
+    // const pathPdf = `D:\\AdminJS\\luandev\\AdminJS-master\\${filePath}`;
     // console.log(pathPdf);
     // console.log(` el Path del Pdf Adjunto es : ${pathPdf}`);
 
@@ -80,7 +80,7 @@ const afterNewHookUpload = async (response, context) => {
     await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
     //console.log(unNombre);
 
-    const pathPdf = `D:\\adminbro\\luandev\\adminbro-master\\${filePath}`;
+    const pathPdf = `D:\\AdminJS\\luandev\\AdminJS-master\\${filePath}`;
     console.log(pathPdf);
     console.log(` el Path del Pdf Adjunto es : ${pathPdf}`);
 

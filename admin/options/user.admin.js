@@ -40,7 +40,7 @@
     
 // },
 
-const AdminBro = require('admin-bro');
+const AdminJS = require('adminjs');
 const { beforeHookPassword, afterHookPassword } = require('../../hooks/user.hooks_old');
 const { beforeHookUpload, afterHookUpload } = require('../../hooks/user.hooks_old');
 const bcrypt           = require('bcrypt');
@@ -63,9 +63,9 @@ const optionUser = {
         },
          avatar: {
            components: {
-             edit: AdminBro.bundle('../../components/User/Avatar.edit.jsx'),
-             //list: AdminBro.bundle('../../components/User/Avatar.list.jsx'),
-            // show: AdminBro.bundle('../../components/User/Avatar.list.jsx'),
+             edit: AdminJS.bundle('../../components/User/Avatar.edit.jsx'),
+             //list: AdminJS.bundle('../../components/User/Avatar.list.jsx'),
+            // show: AdminJS.bundle('../../components/User/Avatar.list.jsx'),
            },
          },
         password: {

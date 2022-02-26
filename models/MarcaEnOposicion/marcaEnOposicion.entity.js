@@ -2,14 +2,14 @@ const mongoose = require('mongoose')
 
 const MarcaEnOposicionSchema = new mongoose.Schema({
 
-    tipoEstado: {
-        type: String,
-        enum: [
-        'Inicial(Obtenida por el proceso de Marcas en Oposición)',
-        'En atención',
-        'Final'],
-        default: 'Inicial(Obtenida por el proceso de Marcas en Oposición)',
-      }, 
+    // tipoEstado: {
+    //     type: String,
+    //     enum: [
+    //     'Inicial(Obtenida por el proceso de Marcas en Oposición)',
+    //     'En atención',
+    //     'Final'],
+    //     default: 'Inicial(Obtenida por el proceso de Marcas en Oposición)',
+    //   }, 
     marcaEnOposicion: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Marca',

@@ -2,14 +2,14 @@ const mongoose = require('mongoose')
 
 const MarcaSinPublicarSchema = new mongoose.Schema({
 
-    tipoEstado: {
-        type: String,
-        enum: [
-        'Inicial(Obtenida por el proceso de Marcas Sin Publicar)',
-        'En atención',
-        'Final'],
-        default: 'Inicial(Obtenida por el proceso de Marcas Sin Publicar)',
-      }, 
+    // tipoEstado: {
+    //     type: String,
+    //     enum: [
+    //     'Inicial(Obtenida por el proceso de Marcas Sin Publicar)',
+    //     'En atención',
+    //     'Final'],
+    //     default: 'Inicial(Obtenida por el proceso de Marcas Sin Publicar)',
+    //   }, 
     marcaSinPublicar: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Marca',

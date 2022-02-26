@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Label, DropZone, DropZoneItem } from 'admin-bro';
+import { Box, Label, DropZone, DropZoneItem } from 'adminjs';
 
 
 const Avatare = ({ property, record, onChange })=>  {

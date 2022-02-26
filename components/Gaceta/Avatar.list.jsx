@@ -1,6 +1,6 @@
 import React from 'react';
-//import { Box, Label, DropZone } from 'admin-bro';
-import { Box, Label, DropZone, DropZoneItem} from '@admin-bro/design-system'
+//import { Box, Label, DropZone } from 'adminjs';
+import { Box, Label, DropZone, DropZoneItem} from '@adminjs/design-system'
 
 export default function Avatar(props) {
   const srcImg = props.record?.params?.profileExcelLocation;

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 //import { Box, H3, Placeholder, Button} from '@adminjs/design-system'
-import { Box, Label, DropZone, DropZoneItem, H3, Placeholder, Button, Navigation  } from '@admin-bro/design-system'
+import { Box, Label, DropZone, DropZoneItem, H3, Placeholder, Button, Navigation  } from '@adminjs/design-system'
 import {Link } from "react-router-dom";
-import { ApiClient, useNotice, ShowAction} from 'admin-bro'
-//const AdminBro         = require('admin-bro');
+import { ApiClient, useNotice, ShowAction} from 'adminjs'
+//const AdminJS         = require('adminjs');
 
 
 const api = new ApiClient()

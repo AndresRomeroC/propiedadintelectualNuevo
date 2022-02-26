@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 //import { Box, H3, Placeholder, Button} from '@adminjs/design-system'
-import { Box, Label, DropZone, DropZoneItem, H3, H5, Placeholder, Button, Navigation  } from '@admin-bro/design-system'
+import { Box, Label, DropZone, DropZoneItem, H3, H5, Placeholder, Button, Navigation  } from '@adminjs/design-system'
 import {Link } from "react-router-dom";
-import { ApiClient, useNotice, ShowAction} from 'admin-bro'
-//const AdminBro         = require('admin-bro');
+import { ApiClient, useNotice, ShowAction} from 'adminjs'
+//const AdminJS         = require('adminjs');
 
 
 const api = new ApiClient()
 
 const NOTICE_MESSAGE = {
-  message: 'Redirigido a Marcas sin Publicar',
+  message: 'Redirigido a Marcas en Trámite',
   type: 'success',
 }
 const NOTICE_MESSAGE1 = {
@@ -72,8 +72,8 @@ const SomeStats = (response) => {
     <Box variant="grey">
 
 
-      <section overflow="hidden" class="sc-dIsAE iZpzSd admin-bro_Box">
-        <section opacity="0.2,0.4,1" class="sc-dIsAE cnTqve admin-bro_Box">
+      <section overflow="hidden" class="sc-dIsAE iZpzSd adminjs_Box">
+        <section opacity="0.2,0.4,1" class="sc-dIsAE cnTqve adminjs_Box">
           <svg width="249px" height="179px" viewBox="0 0 249 179" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
@@ -157,7 +157,7 @@ const SomeStats = (response) => {
           </g> */}
         </svg>
       </section>
-      <section opacity="0.2,0.4,1" class="sc-dIsAE jjzQmj admin-bro_Box">
+      <section opacity="0.2,0.4,1" class="sc-dIsAE jjzQmj adminjs_Box">
         <svg width="260px" height="260px" viewBox="0 0 260 260" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <circle id="path-1" cx="106" cy="106" r="106"></circle>
@@ -195,32 +195,32 @@ const SomeStats = (response) => {
           </g> */}
         </svg>
       </section>
-      <section height="284" class="sc-dIsAE eOhsXH admin-bro_Box">
-        <div color="white" class="sc-jrsJCI bTrjdm admin-bro_Text">
-          <h2 font-size="h2" class="sc-dIvqjp lcIBYC sc-dlMBXb iEckwY admin-bro_Header admin-bro_H2" 
+      <section height="284" class="sc-dIsAE eOhsXH adminjs_Box">
+        <div color="white" class="sc-jrsJCI bTrjdm adminjs_Text">
+          <h2 font-size="h2" class="sc-dIvqjp lcIBYC sc-dlMBXb iEckwY adminjs_Header adminjs_H2" 
               font-weight="light">Propiedad Intelectual de LeXValor</h2>
-          <div opacity="0.8" class="sc-jrsJCI fTcGZS admin-bro_Text">¡Ahora eres uno de nosotros! Preparamos una métrica para que comiences: </div>
+          <div opacity="0.8" class="sc-jrsJCI fTcGZS adminjs_Text">¡Ahora eres uno de nosotros! Preparamos una métrica para que comiences: </div>
         </div>
       </section>
     </section>
         
-    <section width="1,1,1,1024" class="sc-dIsAE cQyBfq admin-bro_Box">
+    <section width="1,1,1,1024" class="sc-dIsAE cQyBfq adminjs_Box">
 
-    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn admin-bro_Box">
-      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT admin-bro_Box">      
-        <div class="sc-jrsJCI exBroz admin-bro_Text">
+    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn adminjs_Box">
+      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT adminjs_Box">      
+        <div class="sc-jrsJCI exBroz adminjs_Text">
         <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(2.000000, 2.000000)">
         <Box variant="white">
        
-          <H5>Marcas sin Publicar</H5>
-          {/* <div class="sc-jrsJCI bJANQE admin-bro_Text"> Estado en trámite </div> 
+          <H5>Marcas en Trámite</H5>
+          {/* <div class="sc-jrsJCI bJANQE adminjs_Text"> Estado en trámite </div> 
           cantidad de marcas sin publicar (ESTADO en trámite) y no tienen número de gaceta, 
           */}
           
           <Box>
             <Link  to ='/admin/resources/MarcaSinPublicar' >
-            <Button onClick={() => addNotice(NOTICE_MESSAGE)}>Ir a Marcas sin publicar</Button>
+            <Button onClick={() => addNotice(NOTICE_MESSAGE)}>Ir a Marcas en Trámite</Button>
             </Link>    
           </Box>
         </Box>
@@ -229,14 +229,14 @@ const SomeStats = (response) => {
       </div>
       </div>
     </section>
-    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn admin-bro_Box">
-     <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT admin-bro_Box">     
-     <div class="sc-jrsJCI exBroz admin-bro_Text"> 
+    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn adminjs_Box">
+     <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT adminjs_Box">     
+     <div class="sc-jrsJCI exBroz adminjs_Text"> 
         <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(2.000000, 2.000000)">
         <Box variant="white">
           <H5>Marcas publicadas</H5>
-          {/* <div class="sc-jrsJCI bJANQE admin-bro_Text">Estado publicadas </div> 
+          {/* <div class="sc-jrsJCI bJANQE adminjs_Text">Estado publicadas </div> 
           cantidad de marcas publicadas en gaceta (publicadas), (ESTADO PUBLICADA)
           */}
           <Box>
@@ -251,14 +251,14 @@ const SomeStats = (response) => {
       </div>
     </section>
     
-    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn admin-bro_Box">
-      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT admin-bro_Box">      
-      <div class="sc-jrsJCI exBroz admin-bro_Text"> 
+    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn adminjs_Box">
+      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT adminjs_Box">      
+      <div class="sc-jrsJCI exBroz adminjs_Text"> 
         <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(2.000000, 2.000000)">
         <Box variant="white">
           <H5>Marcas en Oposición</H5>
-          {/* <div class="sc-jrsJCI bJANQE admin-bro_Text">Cómo modificar esta vista y agregar  </div> 
+          {/* <div class="sc-jrsJCI bJANQE adminjs_Text">Cómo modificar esta vista y agregar  </div> 
           cuantas están en oposición ( que tenga estado Oposición)*/}
           <Box>
             <Link  to ='/admin/resources/MarcaEnOposicion' >
@@ -272,14 +272,14 @@ const SomeStats = (response) => {
       </div>
     </section>
 
-    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn admin-bro_Box">
-      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT admin-bro_Box">      
-      <div class="sc-jrsJCI exBroz admin-bro_Text"> 
+    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn adminjs_Box">
+      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT adminjs_Box">      
+      <div class="sc-jrsJCI exBroz adminjs_Text"> 
         <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(2.000000, 2.000000)">
         <Box variant="white">
           <H5>Marcas en Renovación</H5>
-          {/* <div class="sc-jrsJCI bJANQE admin-bro_Text">Cómo modificar esta vista y agregar  </div> 
+          {/* <div class="sc-jrsJCI bJANQE adminjs_Text">Cómo modificar esta vista y agregar  </div> 
           cantidad de marcas en renovación, ( que tenga En proceso de renovación)
           */}
           <Box>
@@ -295,14 +295,14 @@ const SomeStats = (response) => {
     </section>
     
 
-    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn admin-bro_Box">      
-      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT admin-bro_Box">      
-      <div class="sc-jrsJCI exBroz admin-bro_Text"> 
+    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn adminjs_Box">      
+      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT adminjs_Box">      
+      <div class="sc-jrsJCI exBroz adminjs_Text"> 
         <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(2.000000, 2.000000)">
         <Box variant="white">
           <H5>Marcas por vencer en un rango de 6 meses</H5>
-          {/* <div class="sc-jrsJCI bJANQE admin-bro_Text">Cómo modificar esta vista y agregar  </div> 
+          {/* <div class="sc-jrsJCI bJANQE adminjs_Text">Cómo modificar esta vista y agregar  </div> 
           cantidad de marcas por vencer (que ya cumplieron los 6 meses), //
           */}
           <Box>
@@ -319,14 +319,14 @@ const SomeStats = (response) => {
 
     
 
-    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn admin-bro_Box">
-      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT admin-bro_Box">
-      <div class="sc-jrsJCI exBroz admin-bro_Text">   
+    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn adminjs_Box">
+      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT adminjs_Box">
+      <div class="sc-jrsJCI exBroz adminjs_Text">   
         <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(2.000000, 2.000000)">
         <Box variant="white">
           <H5>Marcas con Resolución</H5>
-          {/* <div class="sc-jrsJCI bJANQE admin-bro_Text">Cómo modificar esta vista y agregar  </div> 
+          {/* <div class="sc-jrsJCI bJANQE adminjs_Text">Cómo modificar esta vista y agregar  </div> 
           cantidad de marcas con resolución, ( que tenga nùmero de resolución y que tenga estado REGISTRADA)
           */}
           <Box>
@@ -342,14 +342,14 @@ const SomeStats = (response) => {
     </section>
       
 
-    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn admin-bro_Box">
-      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT admin-bro_Box">
-      <div class="sc-jrsJCI exBroz admin-bro_Text">   
+    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn adminjs_Box">
+      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT adminjs_Box">
+      <div class="sc-jrsJCI exBroz adminjs_Text">   
         <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(2.000000, 2.000000)">
         <Box variant="white">
           <H5>Marcas en Proceso de cambio de Nombre</H5>
-          {/* <div class="sc-jrsJCI bJANQE admin-bro_Text">Cómo modificar esta vista y agregar  </div> 
+          {/* <div class="sc-jrsJCI bJANQE adminjs_Text">Cómo modificar esta vista y agregar  </div> 
           cantidad de marcas con resolución, ( que tenga nùmero de resolución y que tenga estado REGISTRADA)
           */}
           <Box>
@@ -363,14 +363,14 @@ const SomeStats = (response) => {
       </div>
       </div>
     </section>
-    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn admin-bro_Box">
-      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT admin-bro_Box">
-      <div class="sc-jrsJCI exBroz admin-bro_Text">   
+    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn adminjs_Box">
+      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT adminjs_Box">
+      <div class="sc-jrsJCI exBroz adminjs_Text">   
         <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(2.000000, 2.000000)">
         <Box variant="white">
           <H5>Marcas en Proceso de Transferencia</H5>
-          {/* <div class="sc-jrsJCI bJANQE admin-bro_Text">Cómo modificar esta vista y agregar  </div> 
+          {/* <div class="sc-jrsJCI bJANQE adminjs_Text">Cómo modificar esta vista y agregar  </div> 
           */}
           <Box>
             <Link  to ='/admin/resources/MarcaProcesoTransferencia' >
@@ -383,14 +383,14 @@ const SomeStats = (response) => {
       </div>
       </div>
     </section>
-    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn admin-bro_Box">
-      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT admin-bro_Box">
-      <div class="sc-jrsJCI exBroz admin-bro_Text">   
+    <section width="1,0.5,0.5,0.3333333333333333" class="sc-dIsAE cHuGUn adminjs_Box">
+      <div class="sc-dIsAE default-dashboard__Card-y6jxa9-0 kgyQN kKlyvT adminjs_Box">
+      <div class="sc-jrsJCI exBroz adminjs_Text">   
         <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group" transform="translate(2.000000, 2.000000)">
         <Box variant="white">
           <H5>Marcas en Proceso de emisión de licencia</H5>
-          {/* <div class="sc-jrsJCI bJANQE admin-bro_Text">Cómo modificar esta vista y agregar  </div> 
+          {/* <div class="sc-jrsJCI bJANQE adminjs_Text">Cómo modificar esta vista y agregar  </div> 
           */}
           <Box>
             <Link  to ='/admin/resources/MarcaProcesoLicenciada' >
@@ -404,8 +404,8 @@ const SomeStats = (response) => {
       </div>
     </section>
 
-    {/* <section width="1" class="sc-dIsAE nrYdW admin-bro_Box">
-    <div class="sc-jrsJCI exBroz admin-bro_Text">
+    {/* <section width="1" class="sc-dIsAE nrYdW adminjs_Box">
+    <div class="sc-jrsJCI exBroz adminjs_Text">
     <Box variant="white">
       <H3>Marcas por vencer en un rango de 6 meses</H3>
       <Box>

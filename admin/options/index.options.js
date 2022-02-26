@@ -1,5 +1,5 @@
-const { default: AdminBro } = require('admin-bro');
-const mongooseAdminBro = require('@admin-bro/mongoose');
+const { default: AdminJS } = require('adminjs');
+const mongooseAdminJS = require('@adminjs/mongoose');
 const translations     =  require('../../src/locale/es-translation.ts');
 const mongoose = require('mongoose');
 
@@ -52,8 +52,8 @@ const EstadoMarca    = require('../../models/EstadoMarca/estadoMarca.admin');
 
 const onlyAdmin = ({ currentAdmin }) => currentAdmin && currentAdmin.Role === 'admin';
 
-AdminBro.registerAdapter(mongooseAdminBro);
-const AdminBroOptions = {
+AdminJS.registerAdapter(mongooseAdminJS);
+const AdminJSOptions = {
   //currentAdmin,
   databases: [mongoose],
   //rootPath: '/adminPropiedad',
@@ -68,11 +68,11 @@ const AdminBroOptions = {
     //       text: 'I am fetched from the backend',
     //     }
     //   },
-    //   component: AdminBro.bundle('../../components/some-stats'),
+    //   component: AdminJS.bundle('../../components/some-stats'),
     // },
     Home: {
       label: "Home1",
-      component: AdminBro.bundle('../../components/some-stats'),
+      component: AdminJS.bundle('../../components/some-stats'),
      },
   },
   resources: [
@@ -101,7 +101,7 @@ const AdminBroOptions = {
     
    // req.session.redirectTo = './admin/resources/MarcaPorVencer'
    // res.redirect('./admin/resources/MarcaPorVencer')
-   // component: AdminBro.bundle(redirect('./admin/resources/MarcaPorVencer'))
+   // component: AdminJS.bundle(redirect('./admin/resources/MarcaPorVencer'))
   //  // return (<Redirect to="/route/to/redirect" />);
   //   //return { redirectTo: './admin/resources/MarcaPorVencer' }
     
@@ -114,11 +114,11 @@ const AdminBroOptions = {
     //   res.redirect('https://www.geeksforgeeks.org');
     // });
   },
-  component: AdminBro.bundle('../../components/some-stats'),
-  //component: AdminBro.bundle(redirect('./admin/resources/MarcaPorVencer'))
+  component: AdminJS.bundle('../../components/some-stats'),
+  //component: AdminJS.bundle(redirect('./admin/resources/MarcaPorVencer'))
   //redirectUrl : './admin/resources/MarcaPorVencer'
   
-  //component: AdminBro.bundle('./admin/resources/MarcaPorVencer'),
+  //component: AdminJS.bundle('./admin/resources/MarcaPorVencer'),
   //component : MarcaPorVencer,
 },
   branding: {
@@ -132,4 +132,4 @@ const AdminBroOptions = {
   locale : {translations}
 };
 
-module.exports = AdminBroOptions    ;
+module.exports = AdminJSOptions    ;
